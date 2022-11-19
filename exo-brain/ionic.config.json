@@ -1,0 +1,7 @@
+{
+  "name": "exo-brain",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
