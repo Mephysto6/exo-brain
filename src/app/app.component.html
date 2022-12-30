@@ -1,0 +1,58 @@
+<ion-app>
+
+  <main class="main-container">
+    <p>1</p>
+    <p>2</p>
+    <p>3</p>
+    <br><br>
+
+    <div class="middle-content">
+      <p>content</p>
+      <ion-router-outlet></ion-router-outlet>
+    </div>
+
+    <!-- <div class="nav-tabs">
+      <p>nav</p>
+      <app-nav></app-nav>
+    </div> -->
+    <!-- <footer class="nav-tabs">
+      <app-footer></app-footer>
+    </footer> -->
+  </main>
+
+  <ion-tabs class="tab-bar">
+
+    <ion-tab-bar class="tab-bar" slot="bottom">
+
+      <ion-tab-button class="tab-bar" tab="take-action">
+        <ion-icon name="checkmark-done-circle-outline"></ion-icon>
+        <ion-label>Action</ion-label>
+      </ion-tab-button>
+
+      <ion-tab-button class="tab-bar" tab="preparation">
+        <ion-icon name="receipt-outline"></ion-icon>
+        <ion-label>Prep</ion-label>
+      </ion-tab-button>
+
+      <ion-tab-button class="tab-bar" tab="settings">
+        <ion-icon name="settings-outline"></ion-icon>
+        <ion-label>Settings</ion-label>
+      </ion-tab-button>
+
+    </ion-tab-bar>
+
+  </ion-tabs>
+
+</ion-app>
+
+
+<!-- storage -->
+
+
+
+
+
+<!-- <header class="header-top">
+  <app-header></app-header>
+</header> -->
+

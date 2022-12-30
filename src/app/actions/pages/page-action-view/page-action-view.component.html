@@ -1,0 +1,36 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>
+      <header>
+        <app-header page_title="Action !"></app-header>
+      </header>
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <br>
+  <app-button-refresh></app-button-refresh>
+  <br>
+  <button (click)="this.refreshing()">Show cards</button>
+  <br><br>
+  <button (click)="this.actionService.clear_keys()">DANGER BUTTON</button>
+  <br><br>
+
+  <!-- <app-action-card
+    *ngIf="this.refreshed"
+    [action]="this.actionService.action_list[1]"
+    action_css="action_list"
+    action_page="view">
+  </app-action-card> -->
+
+  <ion-list *ngFor="let action of this.actionService.action_list">
+
+    <app-action-card
+      [action]="action"
+      action_css="action-list"
+      action_page="view">
+    </app-action-card>
+
+  </ion-list>
+</ion-content>

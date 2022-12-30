@@ -1,0 +1,43 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>
+      Take action !
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">Action title</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  debug : {{ debug }}
+  <br><br>
+  <button (click)="this.add_value()">Add value</button>
+  <br><br>
+  <button (click)="this.get_value()">Get value</button>
+  <br><br>
+  <button (click)="this.get_testing()">Get test keys</button>
+  <br><br>
+  <button (click)="this.refresh()">Refresh</button>
+  <br><br>
+
+  <ion-card *ngFor="let action of action_list">
+    <ion-card-header>
+      <ion-card-title>{{action.name}}</ion-card-title>
+      <ion-card-subtitle>id : {{action.id}}</ion-card-subtitle>
+    </ion-card-header>
+
+    <ion-card-content>
+      priority : {{action.priority}} ;
+      time : {{action.time}} ;
+      last done : {{action.last_done}} ;
+    </ion-card-content>
+    
+    <button (click)="this.clickAction(action.id)">Done</button>
+  </ion-card>
+
+  <!-- <app-page-action-list></app-page-action-list> -->
+</ion-content>

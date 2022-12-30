@@ -1,0 +1,26 @@
+{
+  "database": "exo-brain-db",
+  "version": 1,
+  "encrypted": false,
+  "mode": "full",
+  "tables": [
+    {
+      "name": "actions",
+      "schema": [
+        { "column": "id", "value": "INTEGER PRIMARY KEY NOT NULL" },
+        { "column": "name", "value": "TEXT NOT NULL" },
+        { "column": "time", "value": "INTEGER NOT NULL DEFAULT 15" },
+        { "column": "priority", "value": "INTEGER NOT NULL DEFAULT 0" },
+        { "column": "repetition", "value": "TEXT NOT NULL" },
+        { "column": "repetition_hour", "value": "INTEGER NOT NULL DEFAULT 0" },
+        { "column": "repetition_day", "value": "INTEGER NOT NULL DEFAULT 0" },
+        { "column": "last_date_done", "value": "INTEGER" },
+        { "column": "last_modified", "value": "INTEGER DEFAULT (strftime('%s', 'now'))" }
+      ],
+      "values": [
+        [1, "Action Test", 15, 0, "ONCE", 0, 0, null, 1587310030],
+        [2, "Action Test 2", 30, 1, "ONCE", 0, 0, null, 1590388125]
+      ]
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+ion-button[slot="fixed"] {
+  bottom: 10%;
+}
+.left-btn {
+  left: 20%;
+}
+
+.right-btn {
+  right: 20%;
+}
+
+a {
+  color: black;
+}
+
+ion-button a {
+  background-color: darkblue;
+  width: 100px;
+  padding: 20px;
+  margin: 0;
+}

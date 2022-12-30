@@ -1,0 +1,7 @@
+{
+  "name": "Exo-Brain app",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}

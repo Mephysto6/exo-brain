@@ -1,0 +1,33 @@
+<ion-card *ngIf="this.action" class={{this.action_css}}>
+
+  <!-- action name -->
+  <ion-card-header>
+    <ion-card-title>{{this.action.name}}</ion-card-title>
+    <ion-card-subtitle>id : {{this.action.id}}</ion-card-subtitle>
+  </ion-card-header>
+
+  <!-- action details -->
+  <ion-card-content>
+    priority : {{this.action.priority}} ;
+    time : {{this.action.time}} ;
+    last done : {{this.action.last_done}} ;
+    creation : {{this.action.creation_date}} ;
+    order : {{this.action.order}} ;
+  </ion-card-content>
+
+  <!-- buttons -->
+  <ion-button
+    *ngIf='this.action_page === "view"'
+    (click)="this.actionService.clickAction(this.action.id)"
+  >Done</ion-button>
+
+  <ion-button
+    *ngIf='this.action_page === "change"'
+    routerLink="/preparation/edit/{{this.action.id}}"
+  >Edit</ion-button>
+  <ion-button
+    *ngIf='this.action_page === "change"'
+    (click)="this.actionService.deleteAction(this.action.id)"
+  >Delete</ion-button>
+
+</ion-card>

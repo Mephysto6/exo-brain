@@ -1,0 +1,35 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>
+      <header>
+        <app-header page_title="Prep ..."></app-header>
+      </header>
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-button slot="fixed" class="left-btn" routerLink="/preparation">Back</ion-button>
+  <ion-button slot="fixed" class="right-btn" routerLink="/preparation">Confirm</ion-button>
+
+  <br>
+  <!-- <ion-button (click)="this.actionService.refresh()">Refresh</ion-button> -->
+  <app-button-refresh></app-button-refresh>
+  <br><br>
+
+  <ion-reorder-group [disabled]="false" (ionItemReorder)="handleReorder($any($event))">
+    <ion-item *ngFor="let action of this.actionService.action_list">
+
+      <app-action-card
+        [action]="action"
+        action_css="action_edit"
+        action_page="change">
+      </app-action-card>
+
+      <ion-reorder slot="start"></ion-reorder>
+
+    </ion-item>
+  </ion-reorder-group>
+
+
+</ion-content>

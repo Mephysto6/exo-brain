@@ -1,0 +1,27 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>
+      <header>
+        <app-header page_title="Edit !"></app-header>
+      </header>
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="container" *ngIf="item">
+    <!-- ici on veut un formulaire -->
+    <!-- property binding -->
+
+    <app-form-action [init]="item" (submitted)="onEdit($event)"></app-form-action>
+
+  </div>
+
+  <ion-button slot="fixed" class="left-btn" routerLink="/preparation">Back</ion-button>
+  <ion-button slot="fixed" class="right-btn" routerLink="/preparation">Confirm</ion-button>
+  
+  <div *ngIf="!item">
+    Loading ...
+  </div>
+
+</ion-content>

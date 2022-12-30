@@ -1,0 +1,42 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>
+      Preparation
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">Preparation</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  <br><br>
+  <button (click)="this.refresh()">Refresh</button>
+
+  <ion-card *ngFor="let action of action_list">
+    <ion-card-header>
+      <ion-card-title>{{action.name}}</ion-card-title>
+      <ion-card-subtitle>id : {{action.id}}</ion-card-subtitle>
+    </ion-card-header>
+
+    <ion-card-content>
+      priority : {{action.priority}} ;
+      time : {{action.time}} ;
+    </ion-card-content>
+  </ion-card>
+
+</ion-content>
+
+<ion-footer>
+  <ion-toolbar>
+    <ion-title>
+      <div>
+        <a routerLink="/tabs/tab2/edit"><ion-button class="button-edit" color="warning">Edit</ion-button></a>
+        <a routerLink="/tabs/tab2/new"><ion-button class="button-add" color="success">New</ion-button></a>
+      </div>
+    </ion-title>
+  </ion-toolbar>
+</ion-footer>
