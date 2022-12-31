@@ -9,8 +9,8 @@
 </ion-header>
 
 <ion-content>
-  <ion-button slot="fixed" class="left-btn" routerLink="/preparation">Back</ion-button>
-  <ion-button slot="fixed" class="right-btn" routerLink="/preparation">Confirm</ion-button>
+  <ion-button slot="fixed" class="left-btn" (click)="back()">Back</ion-button>
+  <ion-button slot="fixed" class="right-btn" (click)="confirm()">Confirm</ion-button>
 
   <br>
   <!-- <ion-button (click)="this.actionService.refresh()">Refresh</ion-button> -->

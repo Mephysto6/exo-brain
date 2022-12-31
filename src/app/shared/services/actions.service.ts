@@ -14,9 +14,12 @@ import { Storage } from '@ionic/storage-angular';
   providedIn: 'root'
 })
 export class ActionsService {
+
   private _storage: Storage | null = null;
   public ids !: Number[] ;
   public action_list !: Action[] ;
+  public temp_ids_list !: number[] ;
+
   // attributes for each db column incl. id
   // make new service for db interactions
   // private dbReady = new BehaviorSubject(false) ;
