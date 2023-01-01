@@ -29,10 +29,10 @@ export class PageActionChangeComponent implements OnInit {
     // swapping the two in the ids_list order
     // (copying the array)
     var new_ids_list = Object.assign([], this.actionService.temp_ids_list) ;
-    console.log('new_ids_list', new_ids_list)
+    console.log('start list', new_ids_list)
     this.actionService.temp_ids_list[order_1] = new_ids_list[order_2] ;
     this.actionService.temp_ids_list[order_2] = new_ids_list[order_1] ;
-    console.log('this.actionService.temp_ids_list', this.actionService.temp_ids_list)
+    console.log('result list', this.actionService.temp_ids_list)
     // Finish the reorder and position the item in the DOM based on
     // where the gesture ended. This method can also be called directly
     // by the reorder group

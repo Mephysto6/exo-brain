@@ -155,8 +155,6 @@ export class ActionsService {
     // give the action a creation date
     var date_string = this.make_date(new Date()) ;
     partial_action.creation_date = date_string;
-    // give the action an order n#
-    partial_action.order = ids_list.length - 1 ;
     // create the Action
     var action = new Action(partial_action) ;
     await this.set_action_by_id(action.id, action) ;

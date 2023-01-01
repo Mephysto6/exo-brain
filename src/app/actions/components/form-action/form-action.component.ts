@@ -1,5 +1,5 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { FormBuilder, FormGroup, NgForm, Validators } from '@angular/forms';
 import { ActionsService } from 'src/app/shared/services/actions.service';
 import { Router } from '@angular/router';
 import { Action } from 'src/app/core/models/action';
@@ -11,6 +11,7 @@ import { Action } from 'src/app/core/models/action';
 })
 export class FormActionComponent implements OnInit {
 
+  @ViewChild('myForm') myForm!: NgForm;
   @Input() init!: Action;
   @Output() submitted = new EventEmitter<Action>() ;
   public form !: FormGroup;
@@ -31,6 +32,11 @@ export class FormActionComponent implements OnInit {
       repetition_day: [this.init.repetition_day],
       last_done: [this.init.last_done],
     });
+  }
+
+  triggerYeetSubmit() : void {
+    console.log("triggerYeetSubmit") ;
+    this.myForm.ngSubmit.emit();
   }
 
   onSubmit() {

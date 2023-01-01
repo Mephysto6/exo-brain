@@ -10,5 +10,4 @@ export interface ActionI {
   repetition_day: number,
   creation_date: string,
   last_done: string,
-  order: number,
 }

@@ -1,35 +1,42 @@
-<form [formGroup]='form' (ngSubmit)="onSubmit()">
+<form
+  #myForm="ngForm"
+  [formGroup]='form'
+  (ngSubmit)="onSubmit()"
+>
   <div class="form-group">
-    <label for="name">name</label>
+    <label for="name">name : </label>
     <input formControlName="name" type="text" class="form-control" id="name">
   </div>
-
+  <br>
   <div class="form-group">
-    <label for="priority">priority</label>
+    <label for="priority">priority : </label>
     <input formControlName='priority' type="number" class="form-control" id="priority">
   </div>
-
+  <br>
   <div class="form-group">
-    <label for="time">time</label>
+    <label for="time">time : </label>
     <input formControlName='time' type="number" class="form-control" id="time">
   </div>
-
+  <br>
   <div class="form-group">
-    <label for="repetition">repetition</label>
+    <label for="repetition">repetition : </label>
     <input formControlName='repetition' type="text" class="form-control" id="repetition">
   </div>
-
+  <br>
   <div class="form-group">
-    <label for="repetition_hour">hour of reset</label>
+    <label for="repetition_hour">hour of reset : </label>
     <input formControlName='repetition_hour' type="text" class="form-control" id="repetition_hour">
   </div>
-
+  <br>
   <div class="form-group">
-    <label for="repetition_day">day of reset</label>
+    <label for="repetition_day">day of reset : </label>
     <input formControlName='repetition_day' type="text" class="form-control" id="repetition_day">
   </div>
-
-  <button type="submit" class="btn btn-primary">Submit</button>
+  <br>
+  <!-- <ion-button type="submit"
+    slot="fixed" class="right-btn"
+    routerLink="/preparation"
+  >Confirm</ion-button> -->
   <!-- <p>invalid: {{form.invalid}}</p> -->
 </form>
 

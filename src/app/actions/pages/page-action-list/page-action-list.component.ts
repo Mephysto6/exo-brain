@@ -22,6 +22,10 @@ export class PageActionListComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  async ngAfterViewInit() {
+    await this.actionService.refresh() ;
+  }
+  
   goToEdit(id: number) {
     console.log("click") ;
     // rediriger vers /orders/edit/{id}

@@ -1,8 +1,9 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, QueryList, ViewChildren } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActionsService } from 'src/app/shared/services/actions.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Action } from 'src/app/core/models/action';
+import { FormActionComponent } from '../../components/form-action/form-action.component';
 
 @Component({
   selector: 'app-page-action-edit',
@@ -10,6 +11,7 @@ import { Action } from 'src/app/core/models/action';
   styleUrls: ['./page-action-edit.component.scss'],
 })
 export class PageActionEditComponent implements OnInit {
+  @ViewChildren(FormActionComponent) formActionComponent !: QueryList<FormActionComponent> ;
   public item !: Action;
 
   constructor(
@@ -34,4 +36,10 @@ export class PageActionEditComponent implements OnInit {
     this.actionService.refresh()
   }
 
+  yeetSubmit(): void {
+    console.log("yeetSubmit") ;
+    console.log("formActionComponent : ", this.formActionComponent) ;
+    console.log("formActionComponent.first : ", this.formActionComponent.first) ;
+    this.formActionComponent.first.triggerYeetSubmit();
+ }
 }

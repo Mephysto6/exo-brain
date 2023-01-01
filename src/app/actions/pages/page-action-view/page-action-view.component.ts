@@ -23,6 +23,9 @@ export class PageActionViewComponent implements OnInit {
   async ngOnInit() {
   }
 
+  async ngAfterViewInit() {
+    await this.actionService.refresh() ;
+  }
   // async refresh() {
   //   var ids_str = await this.actionService.get("ids") ;
   //   this.ids = await JSON.parse(ids_str) ;

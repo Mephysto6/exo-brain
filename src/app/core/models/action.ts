@@ -12,7 +12,6 @@ export class Action implements ActionI {
   repetition_day = 0;
   creation_date = "2022Y - 12M - 1D - 00:00";
   last_done = "2022Y - 12M - 1D - 16:00";
-  order = 0 ;
 
   constructor(obj?: Partial<Action>) {
     if (obj) {
