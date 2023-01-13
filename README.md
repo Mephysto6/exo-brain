@@ -13,8 +13,8 @@ in android studio > menu Build > Generate Signed Bundle / APK
 
 ## To-Do
 
-X done / undone state (comparing dates /vs/ next to do date)
-X padding bottom in prep (change & list) to see the items when scrolling
+- X done / undone state (comparing dates /vs/ next to do date)
+- X padding bottom in prep (change & list) to see the items when scrolling
 - settings (dark mode & others)
 - undone button in prep
 - view only to-do tasks in take action page
