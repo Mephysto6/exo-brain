@@ -26,11 +26,11 @@ export class ActionsService {
   // private dbName = "" ;
 
   // current keys :
-  //  ids : list of all IDs of actions currently saved
-  //  each id (number) : a json acting for an Action
+  //  ids : list of all IDs of actions currently saved in order
+  //  [each id] (number) : a json acting for an Action
   //  ?columns : list of the attributes of Actions
   //  settings : list of the settings names
-  //  each of the settings name : just the value necessary
+  //  [each of the settings name] : just the value necessary
 
   constructor(private storage: Storage) {
     console.log('constructor');

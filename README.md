@@ -11,3 +11,14 @@ then shutdown emulator then turn on again
 
 in android studio > menu Build > Generate Signed Bundle / APK
 
+## To-Do
+
+X done / undone state (comparing dates /vs/ next to do date)
+X padding bottom in prep (change & list) to see the items when scrolling
+- settings (dark mode & others)
+- undone button in prep
+- view only to-do tasks in take action page
+- priority as colours
+- repetition dae as names from list
+- form examples
+
