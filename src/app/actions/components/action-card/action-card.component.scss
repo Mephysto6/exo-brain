@@ -1,8 +1,58 @@
+$transparency: 0.3 ;
+$red: #ff0000;
+$prio0: rgba(red, $transparency);
+$orange: #ff7b00;
+$prio1: rgba(orange, $transparency);
+$yellow: #fffb00;
+$prio2: rgba(yellow, $transparency);
+$blue: #0066ff;
+$prio3: rgba(rgb(57, 149, 255), $transparency);
+
 .action-list {
   width: 100%;
   // height: 9em;
+  .done-true {
+    color: rgb(0, 0, 0);
+    // background-color: rgb(161, 161, 161);
+    text-decoration: line-through;
+  }
 }
 .action-edit {
   width: 100%;
   height: 11em;
+  // width: 100%;
+  .done-true {
+    color: rgb(0, 0, 0);
+    // background-color: rgb(161, 161, 161);
+    text-decoration: line-through;
+  }
+}
+
+.priority-0 {
+  background-color: $prio0;
+}
+.priority-1 {
+  background-color: $prio1;
+}
+.priority-2 {
+  background-color: $prio2;
+}
+.priority-3 {
+  background-color: $prio3;
+}
+
+.flex-card {
+  display: flex;
+  flex-direction: row;
+  align-content: center;
+  align-items: center;
+  justify-content: flex-start;
+}
+.flex-items {
+  margin: 3px 15px;
+}
+.flex-col {
+  display: flex;
+  flex-direction: column;
+
 }

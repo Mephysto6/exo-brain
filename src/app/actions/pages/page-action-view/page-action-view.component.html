@@ -2,7 +2,9 @@
   <ion-toolbar>
     <ion-title>
       <header>
-        <app-header page_title="Action !"></app-header>
+
+          <app-header page_title="Action !"></app-header>
+
       </header>
     </ion-title>
   </ion-toolbar>
@@ -12,8 +14,8 @@
   <br>
   <app-button-refresh></app-button-refresh>
   <br><br>
-  <button (click)="this.actionService.clear_keys()">Clear all tasks</button>
-  <br><br>
+  <!-- <button (click)="this.actionService.clear_keys()">Clear all tasks</button> -->
+  <!-- <br><br> -->
 
   <!-- <app-action-card
     *ngIf="this.refreshed"
@@ -25,6 +27,7 @@
   <ion-list *ngFor="let action of this.actionService.action_list">
 
     <app-action-card
+      *ngIf="!(this.action | done)"
       [action]="action"
       action_css="action-list"
       action_page="view">

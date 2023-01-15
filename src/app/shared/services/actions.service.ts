@@ -213,15 +213,29 @@ export class ActionsService {
 
   async clickAction(id: number) {
     console.log("clickAction", id) ;
-    const now = new Date();
-    var date_string = this.make_date(now) ;
-    var current_action_str = await this.get(String(id)) ;
-    var current_action = JSON.parse(current_action_str) ;
-    current_action["last_done"] = date_string
-    current_action_str = JSON.stringify(current_action)
-    this.set(String(id), current_action_str)
-    this.refresh()
-    console.log("clickAction current_action_str : ", current_action_str) ;
+    var date_string = this.make_date(new Date()) ;
+    var current_action = await this.getActionDetails(id) ;
+    current_action.last_done = date_string
+    await this.set_action_by_id(id, current_action) ;
+    await this.refresh() ;
+  }
+
+  async unDone(id: number) {
+    console.log("unDone", id) ;
+    var this_action = await this.getActionDetails(id) ;
+    this_action.last_done = this_action.creation_date ;
+    await this.set_action_by_id(id, this_action) ;
+    await this.refresh()
+
+    // const now = new Date();
+    // var date_string = this.make_date(now) ;
+    // var current_action_str = await this.get(String(id)) ;
+    // var current_action = JSON.parse(current_action_str) ;
+    // current_action["last_done"] = date_string
+    // current_action_str = JSON.stringify(current_action)
+    // this.set(String(id), current_action_str)
+    // this.refresh()
+    // console.log("clickAction current_action_str : ", current_action_str) ;
   }
 
 
