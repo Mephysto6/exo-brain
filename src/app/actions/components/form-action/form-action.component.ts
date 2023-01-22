@@ -14,7 +14,10 @@ export class FormActionComponent implements OnInit {
   @ViewChild('myForm') myForm!: NgForm;
   @Input() init!: Action;
   @Output() submitted = new EventEmitter<Action>() ;
+
   public form !: FormGroup;
+  public repetition_choices = ["ONCE", "DAILY", "WEEKLY"] ;
+  public priority_choices = [0, 1, 2, 3] ;
 
   constructor(private fb: FormBuilder) {
     console.log(this.init); // undefined

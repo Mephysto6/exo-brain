@@ -10,7 +10,12 @@
   <br>
   <div class="form-group">
     <label for="priority">priority : </label>
-    <input formControlName='priority' type="number" class="form-control" id="priority">
+    <select formControlName='priority' class="priority{{form.value.priority}}">
+      <option *ngFor="let choice of priority_choices" [ngValue]="choice" class="priority-{{choice}}">
+        {{choice}}
+      </option>
+    </select>
+    <!-- <input formControlName='priority' type="number" class="form-control" id="priority"> -->
   </div>
   <br>
   <div class="form-group">
@@ -20,7 +25,12 @@
   <br>
   <div class="form-group">
     <label for="repetition">repetition : </label>
-    <input formControlName='repetition' type="text" class="form-control" id="repetition">
+    <select formControlName='repetition'>
+      <option *ngFor="let choice of repetition_choices" [ngValue]="choice">
+        {{choice}}
+      </option>
+    </select>
+    <!-- <input type="text" class="form-control" id="repetition"> -->
   </div>
   <br>
   <div class="form-group">

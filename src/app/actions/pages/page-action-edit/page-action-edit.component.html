@@ -10,8 +10,6 @@
 
 <ion-content>
   <div class="container" *ngIf="item">
-    <!-- ici on veut un formulaire -->
-    <!-- property binding -->
 
     <app-form-action [init]="item" (submitted)="onEdit($event)"></app-form-action>
 

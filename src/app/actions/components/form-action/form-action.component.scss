@@ -1,6 +1,9 @@
 @import '../../../shared/components/btn/btn.component.scss';
+@import '../action-card/action-card.component.scss';
 
 .form-group {
   margin: 10px;
-  text-align: center;
+  text-align: left;
+  padding: 5px;
 }
+
