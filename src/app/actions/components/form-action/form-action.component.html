@@ -8,19 +8,40 @@
     <input formControlName="name" type="text" class="form-control" id="name">
   </div>
   <br>
-  <div class="form-group">
+  <div class="flex-priority form-group">
     <label for="priority">priority : </label>
-    <select formControlName='priority' class="priority{{form.value.priority}}">
+    <ion-list lines="none">
+      <ion-radio-group formControlName="priority" [value]="this.init.priority" class="flex-priority">
+        <ion-item>
+          <ion-label><app-priority-icon [priority]="0"></app-priority-icon></ion-label>
+          <ion-radio slot="start" [value]="0"></ion-radio>
+        </ion-item>
+        <ion-item>
+          <ion-label><app-priority-icon [priority]="1"></app-priority-icon></ion-label>
+          <ion-radio slot="start" [value]="1"></ion-radio>
+        </ion-item>
+        <ion-item>
+          <ion-label><app-priority-icon [priority]="2"></app-priority-icon></ion-label>
+          <ion-radio slot="start" [value]="2"></ion-radio>
+        </ion-item>
+        <ion-item>
+          <ion-label><app-priority-icon [priority]="3"></app-priority-icon></ion-label>
+          <ion-radio slot="start" [value]="3"></ion-radio>
+        </ion-item>
+      </ion-radio-group>
+    </ion-list>
+
+    <!-- <select formControlName='priority' class="priority{{form.value.priority}}">
       <option *ngFor="let choice of priority_choices" [ngValue]="choice" class="priority-{{choice}}">
         {{choice}}
       </option>
-    </select>
+    </select> -->
     <!-- <input formControlName='priority' type="number" class="form-control" id="priority"> -->
   </div>
   <br>
   <div class="form-group">
     <label for="time">time : </label>
-    <input formControlName='time' type="number" class="form-control" id="time">
+    <input formControlName="time" type="number" class="form-control" id="time">
   </div>
   <br>
   <div class="form-group">

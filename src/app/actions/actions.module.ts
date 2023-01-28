@@ -14,9 +14,11 @@ import { PageActionViewComponent } from './pages/page-action-view/page-action-vi
 import { PageActionEditComponent } from './pages/page-action-edit/page-action-edit.component';
 import { PageActionChangeComponent } from './pages/page-action-change/page-action-change.component';
 import { PageActionAddComponent } from './pages/page-action-add/page-action-add.component';
+
 import { FormActionComponent } from './components/form-action/form-action.component';
 import { ActionCardComponent } from './components/action-card/action-card.component';
 import { ButtonRefreshComponent } from './components/button-refresh/button-refresh.component';
+import { PriorityIconComponent } from './components/priority-icon/priority-icon.component';
 
 @NgModule({
   declarations: [
@@ -28,6 +30,7 @@ import { ButtonRefreshComponent } from './components/button-refresh/button-refre
     FormActionComponent,
     ActionCardComponent,
     ButtonRefreshComponent,
+    PriorityIconComponent,
   ],
   imports: [
     CommonModule,
