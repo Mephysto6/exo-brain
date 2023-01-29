@@ -8,25 +8,13 @@
     <input formControlName="name" type="text" class="form-control" id="name">
   </div>
   <br>
-  <div class="flex-priority form-group">
+  <div class="flex-row form-group">
     <label for="priority">priority : </label>
     <ion-list lines="none">
-      <ion-radio-group formControlName="priority" [value]="this.init.priority" class="flex-priority">
-        <ion-item>
-          <ion-label><app-priority-icon [priority]="0"></app-priority-icon></ion-label>
-          <ion-radio slot="start" [value]="0"></ion-radio>
-        </ion-item>
-        <ion-item>
-          <ion-label><app-priority-icon [priority]="1"></app-priority-icon></ion-label>
-          <ion-radio slot="start" [value]="1"></ion-radio>
-        </ion-item>
-        <ion-item>
-          <ion-label><app-priority-icon [priority]="2"></app-priority-icon></ion-label>
-          <ion-radio slot="start" [value]="2"></ion-radio>
-        </ion-item>
-        <ion-item>
-          <ion-label><app-priority-icon [priority]="3"></app-priority-icon></ion-label>
-          <ion-radio slot="start" [value]="3"></ion-radio>
+      <ion-radio-group formControlName="priority" [value]="this.init.priority" class="flex-row">
+        <ion-item *ngFor="let choice of priority_choices">
+          <ion-label><app-priority-icon [priority]="choice"></app-priority-icon></ion-label>
+          <ion-radio slot="start" [value]="choice"></ion-radio>
         </ion-item>
       </ion-radio-group>
     </ion-list>
@@ -44,13 +32,22 @@
     <input formControlName="time" type="number" class="form-control" id="time">
   </div>
   <br>
-  <div class="form-group">
+  <div class="flex-row form-group">
     <label for="repetition">repetition : </label>
-    <select formControlName='repetition'>
+    <ion-list lines="none">
+      <ion-radio-group formControlName="repetition" [value]="this.init.repetition" class="flex-row">
+        <ion-item *ngFor="let choice of repetition_choices">
+          <ion-label>{{choice}}</ion-label>
+          <ion-radio slot="start" [value]="choice"></ion-radio>
+        </ion-item>
+      </ion-radio-group>
+    </ion-list>
+
+    <!-- <select formControlName='repetition'>
       <option *ngFor="let choice of repetition_choices" [ngValue]="choice">
         {{choice}}
       </option>
-    </select>
+    </select> -->
     <!-- <input type="text" class="form-control" id="repetition"> -->
   </div>
   <br>

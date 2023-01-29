@@ -18,7 +18,7 @@ in android studio > menu Build > Generate Signed Bundle / APK
 - settings (dark mode & others)
 - X undone button in prep
 - X view only to-do tasks in take action page
-- priority as colours
+- X priority as colours
 - repetition day as names from list
 - form examples
 
