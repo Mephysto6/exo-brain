@@ -19,6 +19,7 @@ in android studio > menu Build > Generate Signed Bundle / APK
 - X undone button in prep
 - X view only to-do tasks in take action page
 - X priority as colours
+- X disable repetition extras
 - repetition day as names from list
 - form examples
 

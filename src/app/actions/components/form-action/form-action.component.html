@@ -5,7 +5,7 @@
 >
   <div class="form-group">
     <label for="name">name : </label>
-    <input formControlName="name" type="text" class="form-control" id="name">
+    <input formControlName="name" type="text" id="name">
   </div>
   <br>
   <div class="flex-row form-group">
@@ -29,7 +29,7 @@
   <br>
   <div class="form-group">
     <label for="time">time : </label>
-    <input formControlName="time" type="number" class="form-control" id="time">
+    <input formControlName="time" type="number" id="time">
   </div>
   <br>
   <div class="flex-row form-group">
@@ -52,13 +52,23 @@
   </div>
   <br>
   <div class="form-group">
-    <label for="repetition_hour">hour of reset : </label>
-    <input formControlName='repetition_hour' type="text" class="form-control" id="repetition_hour">
+    <label for="repetition_hour">hour of reset (24h clock): </label>
+    <input formControlName='repetition_hour' type="text" id="repetition_hour">
   </div>
   <br>
-  <div class="form-group">
+  <div class="form-group flex-row">
     <label for="repetition_day">day of reset : </label>
-    <input formControlName='repetition_day' type="text" class="form-control" id="repetition_day">
+    <!-- <input formControlName='repetition_day' type="text" id="repetition_day"> -->
+
+    <ion-list lines="none">
+      <ion-radio-group formControlName="repetition_day" [value]="this.init.repetition_day" class="flex-row">
+        <ion-item *ngFor="let day of days; let index = index">
+          <ion-label>{{day}}</ion-label>
+          <ion-radio slot="start" [value]="index"></ion-radio>
+        </ion-item>
+      </ion-radio-group>
+    </ion-list>
+
   </div>
   <br>
   <!-- <ion-button type="submit"
