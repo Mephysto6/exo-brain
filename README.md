@@ -20,6 +20,9 @@ in android studio > menu Build > Generate Signed Bundle / APK
 - X view only to-do tasks in take action page
 - X priority as colours
 - X disable repetition extras
-- repetition day as names from list
-- form examples
+- X repetition day as names from list
+- form examples (empty input => shadow text)
+- "?" into pop up explaining the form inputs
+- foldable categories
+- better-looking action cards
 

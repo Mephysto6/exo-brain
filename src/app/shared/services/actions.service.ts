@@ -16,21 +16,22 @@ import { Storage } from '@ionic/storage-angular';
 export class ActionsService {
 
   private _storage: Storage | null = null;
+
   public ids !: Number[] ;
-  public action_list !: Action[] ;
   public temp_ids_list !: number[] ;
 
-  // attributes for each db column incl. id
-  // make new service for db interactions
-  // private dbReady = new BehaviorSubject(false) ;
-  // private dbName = "" ;
+  public action_list !: Action[] ;
+
+  public categories !: string[] ;
+  public temp_categories_list !: string[] ;
 
   // current keys :
-  //  ids : list of all IDs of actions currently saved in order
-  //  [each id] (number) : a json acting for an Action
-  //  ?columns : list of the attributes of Actions
-  //  settings : list of the settings names
-  //  [each of the settings name] : just the value necessary
+  //  id_counter : number - current highest id
+  //  ids : number[] - list of all IDs of actions currently saved in order
+  //  <each id> : json - a json acting as an Action
+  //  categories : string[] - list of names (string) of each category
+  //  settings : string[] - list of the settings names
+  //  <each setting> : string - just the value necessary
 
   constructor(private storage: Storage) {
     console.log('constructor');
@@ -55,7 +56,13 @@ export class ActionsService {
 
   // get database keys
   public async get_keys() {
-    return await this._storage?.keys()
+    var key_list = await this._storage?.keys()
+    console.log("key_list : ", key_list)
+    if (!(key_list)) {
+      key_list = [] ;
+      console.log("no key list ")
+    }
+    return key_list
   }
 
   // clear all keys
@@ -63,18 +70,18 @@ export class ActionsService {
     await this._storage?.clear();
   }
 
+  // verifications
+  public async check_key_is_stored(key: string, default_value: string): Promise<void> {
+    var key_list = await this.get_keys()
+    if (!(key_list.includes(key))) {
+      console.log(key + " not in key_list ")
+      await this.set(key, default_value)
+    }
+  }
+
   // id counter
   public async get_id_counter(): Promise<number> {
-    var key_list = await this._storage?.keys()
-    console.log("key_list : ", key_list)
-    if (!(key_list)) {
-      key_list = [] ;
-      console.log("no key list ")
-    }
-    if (!(key_list.includes("id_counter"))) {
-      console.log("id_counter not in key_list ")
-      this.set("id_counter", "0")
-    }
+    await this.check_key_is_stored("id_counter", "0") ;
     var id_counter_str = await this.get("id_counter") ;
     var id_counter = JSON.parse(id_counter_str) ;
     console.log("id_counter : ", id_counter)
@@ -90,16 +97,7 @@ export class ActionsService {
 
   // id list
   public async get_ids_list(): Promise<number[]> {
-    var key_list = await this._storage?.keys()
-    console.log("key_list : ", key_list)
-    if (!(key_list)) {
-      key_list = [] ;
-      console.log("no key list ")
-    }
-    if (!(key_list.includes("ids"))) {
-      console.log("ids not in key_list ")
-      this.set("ids", "[]")
-    }
+    await this.check_key_is_stored("ids", "[]") ;
     var ids_list_str = await this.get("ids") ;
     var ids_list = JSON.parse(ids_list_str) ;
     console.log("ids_list : ", ids_list)
@@ -112,6 +110,7 @@ export class ActionsService {
 
   // action by id
   public async get_action_by_id(id:number): Promise<Action> {
+    await this.check_key_is_stored(String(id), "{}") ;
     var action_str = await this.get(String(id)) ;
     var action = new Action(JSON.parse(action_str)) ;
     return action
@@ -123,11 +122,13 @@ export class ActionsService {
 
   // settings
   public async get_settings_list(): Promise<string[]> {
+    await this.check_key_is_stored("settings", "[]") ;
     var settings_list_str = await this.get("settings") ;
     var settings_list = JSON.parse(settings_list_str) ;
     return settings_list
   }
   public async get_setting_by_name(setting_name:string): Promise<string> {
+    await this.check_key_is_stored(setting_name, "") ;
     var setting_value = await this.get(setting_name) ;
     return setting_value
   }
@@ -135,7 +136,19 @@ export class ActionsService {
     await this.set(setting_name, setting_value) ;
   }
 
-  // business functions
+  // categories
+  public async get_categories_list(): Promise<string[]> {
+    await this.check_key_is_stored("categories", "[]") ;
+    var categories_list_str = await this.get("categories") ;
+    var categories_list = JSON.parse(categories_list_str) ;
+    return categories_list
+  }
+  public async set_categories_list(categories_list: string[]): Promise<void> {
+    var categories_list_str = JSON.stringify(categories_list) ;
+    await this.set("categories", categories_list_str) ;
+  }
+
+  // ------- business functions -------------
 
   async refresh() {
     var ids_str = await this.get("ids") ;
@@ -160,15 +173,6 @@ export class ActionsService {
     await this.set_action_by_id(action.id, action) ;
 
     await this.refresh() ;
-    // var new_action = new Action(action) ;
-    // if (new_action.id == 0) {
-    //   new_action.id = id_counter ;
-    //   id_counter ++ ;
-    //   await this.set("id_counter", id_counter) ;
-    // }
-    // actions_list[new_action.id] = JSON.stringify(new_action);
-    // actions_list_str = JSON.stringify(actions_list);
-    // await this.set("actions", actions_list_str) ;
   }
 
   async getActionDetails(id: number) : Promise<Action> {
@@ -226,16 +230,6 @@ export class ActionsService {
     this_action.last_done = this_action.creation_date ;
     await this.set_action_by_id(id, this_action) ;
     await this.refresh()
-
-    // const now = new Date();
-    // var date_string = this.make_date(now) ;
-    // var current_action_str = await this.get(String(id)) ;
-    // var current_action = JSON.parse(current_action_str) ;
-    // current_action["last_done"] = date_string
-    // current_action_str = JSON.stringify(current_action)
-    // this.set(String(id), current_action_str)
-    // this.refresh()
-    // console.log("clickAction current_action_str : ", current_action_str) ;
   }
 
 
@@ -277,34 +271,5 @@ export class ActionsService {
     return my_date ;
   }
 
-
-  // private collection$ !: Observable<Action[]> ;
-  // private url_api = environment.url_api ;
-
-  // // constructor(private http: HttpClient) {
-  // //   this.collection = this.http.get<Action[]>(`${this.url_api}/actions`) ;
-  // // }
-
-  // // getter
-  // get collection() : Observable<Action[]> {
-  //   return this.collection$ ;
-  // }
-  // // setter
-  // set collection(collec: Observable<Action[]>) {
-  //   this.collection$ = collec ;
-  // }
-
-  // observable (donc à utiliser avec this.orderService.add(item).subcribe() )
-  // public add(item: Action) : Observable<Action> {
-  //   return this.http.post<Action>(`${this.url_api}/actions`, item) ;
-  // }
-
-  // public getById(id: number) : Observable<Action> {
-  //   return this.http.get<Action>(`${this.url_api}/actions/${id}`)
-  // }
-
-  // public update(obj: Action) : Observable<Action> {
-  //   return this.http.put<Action>(`${this.url_api}/actions/${obj.id}`, obj)
-  // }
 
 }
