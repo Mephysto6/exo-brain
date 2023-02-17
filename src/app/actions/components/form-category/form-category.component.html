@@ -1,0 +1,23 @@
+
+<div class="button">
+
+  <form
+    #myForm="ngForm"
+    [formGroup]='form'
+    (ngSubmit)="onSubmit()"
+  >
+
+    <div *ngIf="show_button" (click)="this.click_on_button()">
+      <ion-button>
+        New Category
+      </ion-button>
+    </div>
+
+    <div *ngIf="!show_button" class="flex-form">
+      <input type="text" formControlName="category_name">
+      <ion-button type="submit"><ion-icon name="checkbox-outline"></ion-icon></ion-button>
+    </div>
+
+
+  </form>
+</div>

@@ -7,7 +7,7 @@ export class PrettyDatePipe implements PipeTransform {
 
   transform(date :Date) : string {
     var date_string = date.toLocaleString('en-GB') ;
-    console.log("date_string : ", date_string) ;
+    // console.log("date_string : ", date_string) ;
     var total_date = date_string.split(" ") ;
     // 12/30/2022
     var date_day = total_date[0] ;
@@ -20,7 +20,7 @@ export class PrettyDatePipe implements PipeTransform {
     var month = date_day.split("/")[1]
     var year = date_day.split("/")[2].split(",")[0]
     var hour = date_hour.split(":")[0]
-    console.log("hour : ", hour) ;
+    // console.log("hour : ", hour) ;
 
     if (hour == "12") {
       if (date_halfday == "AM") {
@@ -37,7 +37,7 @@ export class PrettyDatePipe implements PipeTransform {
     var minute = date_hour.split(":")[1]
 
     var my_date = year + "Y - " + month + "M - " + day + "D - " + hour + ":" + minute;
-    console.log("my_date", my_date) ;
+    // console.log("my_date", my_date) ;
     return my_date ;
   }
 

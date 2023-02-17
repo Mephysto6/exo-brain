@@ -21,12 +21,10 @@ export class FormActionComponent implements OnInit {
   public days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
   // public current_repetition = "ONCE" ;
 
-  constructor(private fb: FormBuilder) {
-    console.log(this.init); // undefined
+  constructor(private fb: FormBuilder, public actionService : ActionsService) {
   }
 
   ngOnInit() {
-    console.log(this.init); // ??
     this.initForm() ;
     // this.current_repetition = this.init.repetition ;
     this.onChanges() ;
@@ -41,6 +39,7 @@ export class FormActionComponent implements OnInit {
     this.form = this.fb.group({
       id:[this.init.id],
       name: [this.init.name],
+      category: [this.init.category],
       time: [this.init.time],
       priority: [this.init.priority],
       repetition: [this.init.repetition],

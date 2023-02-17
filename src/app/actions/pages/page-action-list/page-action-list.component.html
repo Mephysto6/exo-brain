@@ -3,28 +3,80 @@
     <ion-title>
       <header>
         <app-header page_title="Prep !"></app-header>
+
+        <ion-toolbar>
+          <ion-segment [value]="this.actionService.current_view" (ionChange)="segmentChanged($event)">
+            <ion-segment-button value="Actions">
+              Action view
+            </ion-segment-button>
+            <ion-segment-button value="Categories">
+              Category view
+            </ion-segment-button>
+          </ion-segment>
+        </ion-toolbar>
+
       </header>
     </ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
-  <!-- <p>debug : {{debug}}</p> -->
   <ion-button slot="fixed" class="left-btn" routerLink="/preparation/edit">Edit</ion-button>
   <ion-button slot="fixed" class="right-btn" routerLink="/preparation/add">Add</ion-button>
 
   <br>
   <app-button-refresh></app-button-refresh>
+  <ion-button *ngIf="this.actionService.current_view === 'Categories'" (click)="this.actionService.closeAllCategories()">Close All</ion-button>
+  <ion-button *ngIf="this.actionService.current_view === 'Categories'" (click)="this.actionService.openAllCategories()">Open All</ion-button>
   <br><br>
 
-  <ion-list *ngFor="let action of this.actionService.action_list">
-    <app-action-card
-      [action]="action"
-      action_css="action-list"
-      action_page="list">
-    </app-action-card>
-  </ion-list>
+  <div *ngIf="this.actionService.current_view==='Actions'">
+    <ion-list *ngFor="let action of this.actionService.action_list">
+      <app-action-card
+        [action]="action"
+        action_css="action-list"
+        action_page="list">
+      </app-action-card>
+    </ion-list>
+  </div>
+
+
+  <div *ngIf="this.actionService.current_view==='Categories'">
+
+    <!-- New Category button -->
+    <app-form-category (submitted)="on_add_new_category($event)"></app-form-category>
+
+    <ion-list *ngFor="let category of this.actionService.categories">
+      <!-- Category name & fold button -->
+      <ion-card>
+        <ion-card-header class="category-header">
+          <ion-icon *ngIf="this.actionService.category_folded[category]" name="caret-forward-outline" (click)="this.actionService.fold_unfold(category)"></ion-icon>
+          <ion-icon *ngIf="!this.actionService.category_folded[category]" name="caret-down-outline" (click)="this.actionService.fold_unfold(category)"></ion-icon>
+          {{category}}
+        </ion-card-header>
+      </ion-card>
+
+      <!-- Actions list -->
+      <div *ngIf="!this.actionService.category_folded[category]">
+        <ion-list *ngFor="let action of this.actionService.action_list">
+          <app-action-card
+            *ngIf="(this.action.category === category)"
+            [action]="action"
+            action_css="action-list"
+            action_page="list">
+          </app-action-card>
+        </ion-list>
+      </div>
+
+    </ion-list>
+
+    <!-- New Category button -->
+    <app-form-category (submitted)="on_add_new_category($event)"></app-form-category>
+
+  </div>
+
   <p class="margin-bot"></p>
+
 </ion-content>
 
 <!--

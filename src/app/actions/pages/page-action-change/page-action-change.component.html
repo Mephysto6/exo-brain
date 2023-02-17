@@ -17,19 +17,54 @@
   <app-button-refresh></app-button-refresh>
   <br><br>
 
-  <ion-reorder-group [disabled]="false" (ionItemReorder)="handleReorder($any($event))">
-    <ion-item *ngFor="let action of this.actionService.action_list">
 
-      <app-action-card
-        [action]="action"
-        action_css="action-edit"
-        action_page="change">
-      </app-action-card>
+  <div *ngIf="this.actionService.current_view==='Actions'">
+    <ion-reorder-group [disabled]="false" (ionItemReorder)="handleReorderActions($any($event))">
+      <ion-item *ngFor="let action of this.actionService.action_list">
 
-      <ion-reorder slot="start"></ion-reorder>
+        <ion-reorder slot="start"></ion-reorder>
+        <app-action-card
+          [action]="action"
+          action_css="action-edit"
+          action_page="change">
+        </app-action-card>
 
-    </ion-item>
-  </ion-reorder-group>
+      </ion-item>
+    </ion-reorder-group>
+  </div>
+
+  <div *ngIf="this.actionService.current_view==='Categories'">
+    <ion-reorder-group [disabled]="false" (ionItemReorder)="handleReorderCategories($any($event))">
+      <ion-item *ngFor="let category of this.actionService.categories">
+
+        <ion-reorder slot="start"></ion-reorder>
+        <div *ngIf="!show_update[category]">
+          {{category}}
+        </div>
+        <div *ngIf="show_update[category]">
+          <app-form-category
+           (submitted)="on_update_category(category, $event)"
+           [show_button]="false"
+          ></app-form-category>
+        </div>
+        <!-- add delete category button -->
+
+        <div class="flex-col flex-items">
+          <ion-button (click)="on_click_edit_category(category)"
+          >Edit</ion-button>
+          <ion-button (click)="on_click_delete_category(category)"
+          >Delete</ion-button>
+        </div>
+
+      </ion-item>
+    </ion-reorder-group>
+  </div>
 
   <p class="margin-bot"></p>
 </ion-content>
+
+<!--
+
+            routerLink="/preparation/edit/{{this.action.id}}"
+            (click)="this.actionService.deleteAction(this.action.id)"
+ -->

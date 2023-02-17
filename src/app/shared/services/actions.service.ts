@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Optional } from '@angular/core';
 import { environment } from 'src/environments/environment';
 // import { readFileSync, writeFileSync, promises as fsPromises } from 'fs';
 import { Action } from 'src/app/core/models/action';
@@ -25,12 +25,18 @@ export class ActionsService {
   public categories !: string[] ;
   public temp_categories_list !: string[] ;
 
+  public current_view : string = "Actions" ;
+  public category_folded : { [name: string]: boolean } = {"No category": true} ;
+
+  public days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
+
+
   // current keys :
   //  id_counter : number - current highest id
   //  ids : number[] - list of all IDs of actions currently saved in order
   //  <each id> : json - a json acting as an Action
   //  categories : string[] - list of names (string) of each category
-  //  settings : string[] - list of the settings names
+  //  settings : json - list of the settings names
   //  <each setting> : string - just the value necessary
 
   constructor(private storage: Storage) {
@@ -57,7 +63,7 @@ export class ActionsService {
   // get database keys
   public async get_keys() {
     var key_list = await this._storage?.keys()
-    console.log("key_list : ", key_list)
+    // console.log("key_list : ", key_list)
     if (!(key_list)) {
       key_list = [] ;
       console.log("no key list ")
@@ -84,7 +90,7 @@ export class ActionsService {
     await this.check_key_is_stored("id_counter", "0") ;
     var id_counter_str = await this.get("id_counter") ;
     var id_counter = JSON.parse(id_counter_str) ;
-    console.log("id_counter : ", id_counter)
+    // console.log("id_counter : ", id_counter)
     return id_counter
   }
   public async increment_id_counter(): Promise<void> {
@@ -122,7 +128,7 @@ export class ActionsService {
 
   // settings
   public async get_settings_list(): Promise<string[]> {
-    await this.check_key_is_stored("settings", "[]") ;
+    await this.check_key_is_stored("settings", "{}") ;
     var settings_list_str = await this.get("settings") ;
     var settings_list = JSON.parse(settings_list_str) ;
     return settings_list
@@ -138,22 +144,53 @@ export class ActionsService {
 
   // categories
   public async get_categories_list(): Promise<string[]> {
+    // await this.set("categories", "[]") ;
     await this.check_key_is_stored("categories", "[]") ;
     var categories_list_str = await this.get("categories") ;
     var categories_list = JSON.parse(categories_list_str) ;
+    if (categories_list.length == 0) {
+      categories_list.push("No category") ;
+      await this.set_categories_list(categories_list) ;
+    }
+    console.log("db categories list : ", categories_list) ;
     return categories_list
   }
   public async set_categories_list(categories_list: string[]): Promise<void> {
     var categories_list_str = JSON.stringify(categories_list) ;
     await this.set("categories", categories_list_str) ;
   }
+  public fold_unfold(category: string) {
+    this.category_folded[category] = !this.category_folded[category]
+  }
+
+
+  // view
+  public async get_current_view(): Promise<string> {
+    await this.check_key_is_stored("current_view", "Actions") ;
+    return await this.get("current_view") ;
+  }
+  public async set_current_view(current_view: string): Promise<void> {
+    await this.set("current_view", current_view) ;
+  }
 
   // ------- business functions -------------
 
   async refresh() {
-    var ids_str = await this.get("ids") ;
-    this.ids = await JSON.parse(ids_str) ;
+    this.ids = await this.get_ids_list()
     this.action_list = await this.getActionList() ;
+    this.categories = await this.get_categories_list() ;
+    this.current_view = await this.get_current_view() ;
+  }
+
+  public closeAllCategories() {
+    for (let category of this.categories) {
+      this.category_folded[category] = true ;
+    }
+  }
+  public openAllCategories() {
+    for (let category of this.categories) {
+      this.category_folded[category] = false ;
+    }
   }
 
   async createAction(partial_action : Partial<Action>) {
@@ -232,12 +269,76 @@ export class ActionsService {
     await this.refresh()
   }
 
+  public async switchCurrentView(new_view?: string): Promise<void> {
+    await this.refresh() ;
+
+    if (new_view) {
+      await this.set_current_view(new_view);
+    }
+    else {
+      if (this.current_view == "Actions") {
+        await this.set_current_view("Categories");
+      }
+      if (this.current_view == "Categories") {
+        await this.set_current_view("Actions");
+      }
+    }
+
+    await this.refresh() ;
+  }
+
+
+  public async addNewCategory(category_name: string): Promise<void> {
+    var current_category_list = await this.get_categories_list() ;
+    current_category_list.push(category_name) ;
+    await this.set_categories_list(current_category_list) ;
+    await this.refresh() ;
+  }
+  public async updateCategory(old_name: string, new_name: string): Promise<void> {
+    // change the name of the category in the category list
+    var current_category_list = await this.get_categories_list() ;
+    for (let index in current_category_list) {
+      if (current_category_list[index] == old_name) {
+        current_category_list[index] = new_name ;
+      }
+    }
+    await this.set_categories_list(current_category_list) ;
+    // change the name of the category in the actions attributes
+    var action_list = await this.getActionList() ;
+    for (let action of action_list) {
+      if (action.category == old_name) {
+        action.category = new_name ;
+        await this.updateAction(action.id, action) ;
+      }
+    }
+    await this.refresh() ;
+  }
+  public async deleteCategory(category_name: string): Promise<void> {
+    // remove the name of the category in the category list
+    var current_category_list = await this.get_categories_list() ;
+    const index_of_category = current_category_list.indexOf(category_name)
+    if (index_of_category > -1) {
+      current_category_list.splice(index_of_category, 1) ;
+    }
+    await this.set_categories_list(current_category_list) ;
+    // change the name of the category to "No category" in the actions attributes
+    var action_list = await this.getActionList() ;
+    for (let action of action_list) {
+      if (action.category == category_name) {
+        action.category = "No category" ;
+        await this.updateAction(action.id, action) ;
+      }
+    }
+    await this.refresh() ;
+  }
+
+
 
   // not database-related
 
   make_date(date :Date) : string {
     var date_string = date.toLocaleString('en-GB') ;
-    console.log("date_string : ", date_string) ;
+    // console.log("date_string : ", date_string) ;
     var total_date = date_string.split(" ") ;
     // 12/30/2022
     var date_day = total_date[0] ;
@@ -250,7 +351,7 @@ export class ActionsService {
     var month = date_day.split("/")[1]
     var year = date_day.split("/")[2].split(",")[0]
     var hour = date_hour.split(":")[0]
-    console.log("hour : ", hour) ;
+    // console.log("hour : ", hour) ;
 
     if (hour == "12") {
       if (date_halfday == "AM") {
@@ -267,9 +368,11 @@ export class ActionsService {
     var minute = date_hour.split(":")[1]
 
     var my_date = year + "Y - " + month + "M - " + day + "D - " + hour + ":" + minute;
-    console.log("my_date", my_date) ;
+    // console.log("my_date", my_date) ;
     return my_date ;
   }
 
-
+  get_day_from_number(day_in_num: number): string {
+    return this.days[day_in_num]
+  }
 }

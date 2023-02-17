@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { stringify } from 'querystring';
 import { Action } from 'src/app/core/models/action';
 import { ActionsService } from 'src/app/shared/services/actions.service';
 
@@ -14,6 +15,7 @@ export class PageActionViewComponent implements OnInit {
   // public action_list !: Action[] ;
   public debug !: any ;
   public refreshed : boolean = false ;
+  // public view : string = "Actions" ;
 
   constructor(
     public actionService : ActionsService,
@@ -25,6 +27,13 @@ export class PageActionViewComponent implements OnInit {
 
   async ngAfterViewInit() {
     await this.actionService.refresh() ;
+  }
+
+  async segmentChanged(ev: any) {
+    console.log("segment change : ", ev)
+    console.log("event.detail : ", ev.detail)
+    console.log("event.detail.value : ", ev.detail.value)
+    await this.actionService.switchCurrentView(ev.detail.value);
   }
   // async refresh() {
   //   var ids_str = await this.actionService.get("ids") ;

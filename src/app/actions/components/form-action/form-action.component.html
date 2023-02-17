@@ -8,6 +8,13 @@
     <input formControlName="name" type="text" id="name">
   </div>
   <br>
+  <div class="form-group">
+    <label for="category">category :</label>
+    <select [value]="this.init.category" name="category" formControlName="category" id="category">
+      <option *ngFor="let category of this.actionService.categories" [value]="category">{{category}}</option>
+    </select>
+  </div>
+  <br>
   <div class="flex-row form-group">
     <label for="priority">priority : </label>
     <ion-list lines="none">

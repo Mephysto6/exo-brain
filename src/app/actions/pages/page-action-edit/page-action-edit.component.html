@@ -11,15 +11,18 @@
 <ion-content>
   <div class="container" *ngIf="item">
 
-    <app-form-action [init]="item" (submitted)="onEdit($event)"></app-form-action>
+    <app-form-action
+     [init]="item"
+     (submitted)="onEdit($event)"
+    ></app-form-action>
 
   </div>
-
-  <ion-button slot="fixed" class="left-btn" routerLink="/preparation">Back</ion-button>
-  <ion-button slot="fixed" class="right-btn" (click)="yeetSubmit()" routerLink="/preparation">Confirm</ion-button>
 
   <div *ngIf="!item">
     Loading ...
   </div>
+
+  <ion-button slot="fixed" class="left-btn" routerLink="/preparation">Back</ion-button>
+  <ion-button slot="fixed" class="right-btn" (click)="yeetSubmit()" routerLink="/preparation">Confirm</ion-button>
 
 </ion-content>

@@ -5,6 +5,17 @@
 
           <app-header page_title="Action !"></app-header>
 
+          <ion-toolbar>
+            <ion-segment [value]="this.actionService.current_view" (ionChange)="segmentChanged($event)">
+              <ion-segment-button value="Actions">
+                Action view
+              </ion-segment-button>
+              <ion-segment-button value="Categories">
+                Category view
+              </ion-segment-button>
+            </ion-segment>
+          </ion-toolbar>
+
       </header>
     </ion-title>
   </ion-toolbar>
@@ -13,25 +24,44 @@
 <ion-content>
   <br>
   <app-button-refresh></app-button-refresh>
+  <ion-button *ngIf="this.actionService.current_view === 'Categories'" (click)="this.actionService.closeAllCategories()">Close All</ion-button>
+  <ion-button *ngIf="this.actionService.current_view === 'Categories'" (click)="this.actionService.openAllCategories()">Open All</ion-button>
   <br><br>
-  <!-- <button (click)="this.actionService.clear_keys()">Clear all tasks</button> -->
-  <!-- <br><br> -->
 
-  <!-- <app-action-card
-    *ngIf="this.refreshed"
-    [action]="this.actionService.action_list[1]"
-    action_css="action_list"
-    action_page="view">
-  </app-action-card> -->
+  <div *ngIf="this.actionService.current_view==='Actions'">
+    <ion-list *ngFor="let action of this.actionService.action_list">
+      <app-action-card
+        *ngIf="!(this.action | done)"
+        [action]="action"
+        action_css="action-list"
+        action_page="view">
+      </app-action-card>
+    </ion-list>
+  </div>
 
-  <ion-list *ngFor="let action of this.actionService.action_list">
+  <div *ngIf="this.actionService.current_view==='Categories'">
+    <ion-list *ngFor="let category of this.actionService.categories">
+      <!-- category : {{category}} -->
+      <ion-card>
+        <ion-card-header class="category-header">
+          <ion-icon *ngIf="this.actionService.category_folded[category]" name="caret-forward-outline" (click)="this.actionService.fold_unfold(category)"></ion-icon>
+          <ion-icon *ngIf="!this.actionService.category_folded[category]" name="caret-down-outline" (click)="this.actionService.fold_unfold(category)"></ion-icon>
+          {{category}}
+        </ion-card-header>
+      </ion-card>
 
-    <app-action-card
-      *ngIf="!(this.action | done)"
-      [action]="action"
-      action_css="action-list"
-      action_page="view">
-    </app-action-card>
+      <div *ngIf="!this.actionService.category_folded[category]">
+        <ion-list *ngFor="let action of this.actionService.action_list">
+          <app-action-card
+            *ngIf="!(this.action | done) && (this.action.category === category)"
+            [action]="action"
+            action_css="action-list"
+            action_page="view">
+          </app-action-card>
+        </ion-list>
+      </div>
 
-  </ion-list>
+    </ion-list>
+  </div>
+
 </ion-content>

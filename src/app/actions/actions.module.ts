@@ -16,6 +16,7 @@ import { PageActionChangeComponent } from './pages/page-action-change/page-actio
 import { PageActionAddComponent } from './pages/page-action-add/page-action-add.component';
 
 import { FormActionComponent } from './components/form-action/form-action.component';
+import { FormCategoryComponent } from './components/form-category/form-category.component';
 import { ActionCardComponent } from './components/action-card/action-card.component';
 import { ButtonRefreshComponent } from './components/button-refresh/button-refresh.component';
 import { PriorityIconComponent } from './components/priority-icon/priority-icon.component';
@@ -28,6 +29,7 @@ import { PriorityIconComponent } from './components/priority-icon/priority-icon.
     PageActionChangeComponent,
     PageActionAddComponent,
     FormActionComponent,
+    FormCategoryComponent,
     ActionCardComponent,
     ButtonRefreshComponent,
     PriorityIconComponent,

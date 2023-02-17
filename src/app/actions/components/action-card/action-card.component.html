@@ -6,8 +6,6 @@
 
   <!-- action name -->
   <ion-card-header class="done-{{this.action | done}}">
-    <ion-card-title>{{this.action.name}}</ion-card-title>
-    <ion-card-subtitle>id : {{this.action.id}}</ion-card-subtitle>
   </ion-card-header>
 
   <!-- action details -->
@@ -27,14 +25,20 @@
         </ion-button>
 
         <div class="flex-items">
-          time : {{this.action.time}} ;
-          <!-- category : {{this.action.category}} ; -->
-          repetition : {{this.action.repetition}} ;
-          repetition hour : {{this.action.repetition_hour}} ;
-          repetition day : {{this.action.repetition_day}} ;
-          last done : {{this.action.last_done}} ;
-          creation : {{this.action.creation_date}} ;
-          done : {{this.action | done }}
+          <ion-card-title>{{this.action.name}}</ion-card-title>
+          <ion-card-subtitle>{{this.action.category}}</ion-card-subtitle>
+        </div>
+
+        <div class="flex-items">
+          <div>{{this.action.time}} min</div>
+          <div *ngIf="this.action.repetition==='ONCE'">One time</div>
+          <div *ngIf="this.action.repetition==='DAILY'">
+            Every day, reset at {{this.action.repetition_hour}}:00
+          </div>
+          <div *ngIf="this.action.repetition==='WEEKLY'">
+            Every week, reset on {{this.actionService.get_day_from_number(this.action.repetition_day)}}
+             at {{this.action.repetition_hour}}:00
+          </div>
         </div>
 
         <div class="flex-col flex-items">

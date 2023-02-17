@@ -16,7 +16,7 @@ export class DonePipe implements PipeTransform {
   ) { }
 
   transform(action : Action): boolean {
-    console.log("transform")
+    // console.log("transform")
     var done = false ;
     const now = this.actionService.make_date(new Date());
     var current_date = this.make_date_object(now) ;
@@ -63,16 +63,16 @@ export class DonePipe implements PipeTransform {
         }
       }
     }
-    console.log("action.creation_date : ", action.creation_date)
-    console.log("action.repetition : ", action.repetition)
-    console.log("start : ", start)
-    console.log("last_done : ", last_done)
-    console.log("current_date : ", current_date)
+    // console.log("action.creation_date : ", action.creation_date)
+    // console.log("action.repetition : ", action.repetition)
+    // console.log("start : ", start)
+    // console.log("last_done : ", last_done)
+    // console.log("current_date : ", current_date)
 
     if (this.is_earlier_than(start, last_done)) var done = true ;
     if (this.is_earlier_than(last_done, start)) var done = false ;
     // should not use last return statement
-    console.log("done : ", done)
+    // console.log("done : ", done)
     return done ;
   }
 

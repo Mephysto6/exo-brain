@@ -32,6 +32,21 @@ export class PageActionListComponent implements OnInit {
     this.router.navigate(['actions', 'edit', id])
   }
 
+  async segmentChanged(ev: any) {
+    console.log("segment change : ", ev)
+    console.log("event.detail : ", ev.detail)
+    console.log("event.detail.value : ", ev.detail.value)
+    await this.actionService.switchCurrentView(ev.detail.value);
+  }
+
+  async on_add_new_category(obj: any) {
+    console.log("on_add_new_category obj : ", obj)
+    console.log("on_add_new_category obj[category_name] : ", obj["category_name"])
+    var new_category = obj["category_name"] ;
+    await this.actionService.addNewCategory(new_category) ;
+    this.actionService.category_folded[new_category] = true ;
+  }
+
   // async clickAction(id: number) {
   //   console.log("clickAction", id) ;
   //   const now = new Date();
