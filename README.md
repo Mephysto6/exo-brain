@@ -13,10 +13,10 @@ in android studio > menu Build > Generate Signed Bundle / APK
 
 ## Road Map
 
-- X done / undone state (comparing dates /vs/ next to do date)
-- X padding bottom in prep (change & list) to see the items when scrolling
+- X done / undone state
+- X padding bottom in prep to see the items when scrolling
 - settings (dark mode & other customisations)
-- X undone button in prep
+- X undone (=reset) button in prep
 - X view only to-do tasks in take action page
 - X priority as colours
 - X disable repetition extras
@@ -25,7 +25,10 @@ in android studio > menu Build > Generate Signed Bundle / APK
 - "?" into pop up explaining the form inputs
 - X foldable categories
 - X better-looking action cards
-- better looking category display
+- X better looking category display
+- X make the whole name of the category the button to fold/unfold
 - X keep same view (actions / categories) and same fold between tabs
 - fix visual bug : unending action card box
-
+- X add export & import of database
+- add validation/check of the imported database
+- add cool logo

@@ -17,11 +17,9 @@ export class FormCategoryComponent implements OnInit {
   constructor(private fb: FormBuilder) { }
 
   ngOnInit() {
-
     this.form = this.fb.group({
       category_name:[""],
     });
-
   }
 
   click_on_button() {

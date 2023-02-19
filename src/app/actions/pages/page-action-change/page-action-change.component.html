@@ -26,7 +26,7 @@
         <app-action-card
           [action]="action"
           action_css="action-edit"
-          action_page="change">
+          current_page="change">
         </app-action-card>
 
       </ion-item>
@@ -39,7 +39,11 @@
 
         <ion-reorder slot="start"></ion-reorder>
         <div *ngIf="!show_update[category]">
-          {{category}}
+          <app-category-card
+            [folded]="this.actionService.category_folded[category]"
+            [name]="category"
+            current_page="change"
+          ></app-category-card>
         </div>
         <div *ngIf="show_update[category]">
           <app-form-category

@@ -1,0 +1,13 @@
+
+<div>
+  <form
+    #myForm="ngForm"
+    [formGroup]='form'
+    (ngSubmit)="onSubmit()"
+  >
+
+    <input type="text" formControlName="import_database">
+    <ion-button type="submit"><ion-icon name="checkbox-outline"></ion-icon></ion-button>
+
+  </form>
+</div>

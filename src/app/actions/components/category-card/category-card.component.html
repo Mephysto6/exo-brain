@@ -1,0 +1,13 @@
+<ion-card>
+
+  <div class="category-name flex-category">
+    <!-- buttons -->
+    <div *ngIf="current_page !== 'change'">
+      <ion-icon *ngIf="folded" name="caret-forward-outline"></ion-icon>
+      <ion-icon *ngIf="!folded" name="caret-down-outline"></ion-icon>
+    </div>
+    <!-- category name -->
+    <ion-card-title>{{name}}</ion-card-title>
+  </div>
+
+</ion-card>

@@ -28,7 +28,21 @@ export class ActionsService {
   public current_view : string = "Actions" ;
   public category_folded : { [name: string]: boolean } = {"No category": true} ;
 
-  public days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
+  public days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"] ;
+
+  public settings_index = [0, 1, 2] ;
+  public settings_list = ["mode", "text size", "colour customisation"] ;
+  public settings_values : any[] = ["dark", 12, "background-ffffff/p0-rrrrrr/p1-oooooo/p2-jjjjjj/p3-bbbbbb"];
+  public settings_default_values : { [name: string]: any } = {
+    "mode": "dark",
+    "text-size": 12,
+    "colour customisation": "background-ffffff/p0-rrrrrr/p1-oooooo/p2-jjjjjj/p3-bbbbbb",
+  };
+  public settings_possible_values : { [name: string]: any } = {
+    "mode": ["dark", "wrong"],
+    "text-size": [8, 10, 12, 14, 16],
+    "colour customisation": [],
+  };
 
 
   // current keys :
@@ -36,13 +50,12 @@ export class ActionsService {
   //  ids : number[] - list of all IDs of actions currently saved in order
   //  <each id> : json - a json acting as an Action
   //  categories : string[] - list of names (string) of each category
-  //  settings : json - list of the settings names
-  //  <each setting> : string - just the value necessary
+  //  settings : json - json of the settings names as keys, their values as values
 
   constructor(private storage: Storage) {
     console.log('constructor');
     this.init();
-   }
+  }
 
   async init() {
     console.log('init');
@@ -127,19 +140,15 @@ export class ActionsService {
   }
 
   // settings
-  public async get_settings_list(): Promise<string[]> {
+  public async get_settings(): Promise<any> {
     await this.check_key_is_stored("settings", "{}") ;
-    var settings_list_str = await this.get("settings") ;
-    var settings_list = JSON.parse(settings_list_str) ;
-    return settings_list
+    var settings_str = await this.get("settings") ;
+    var settings = JSON.parse(settings_str) ;
+    return settings
   }
-  public async get_setting_by_name(setting_name:string): Promise<string> {
-    await this.check_key_is_stored(setting_name, "") ;
-    var setting_value = await this.get(setting_name) ;
-    return setting_value
-  }
-  public async set_setting_by_name(setting_name:string, setting_value:string): Promise<void> {
-    await this.set(setting_name, setting_value) ;
+  public async set_settings(settings: any): Promise<void> {
+    var settings_str = JSON.stringify(settings) ;
+    await this.set("settings", settings_str) ;
   }
 
   // categories
@@ -180,6 +189,7 @@ export class ActionsService {
     this.action_list = await this.getActionList() ;
     this.categories = await this.get_categories_list() ;
     this.current_view = await this.get_current_view() ;
+    var settings_json = await this.get_settings() ;
   }
 
   public closeAllCategories() {
@@ -332,7 +342,37 @@ export class ActionsService {
     await this.refresh() ;
   }
 
+  public async changeSettingValue(setting: string, value: string): Promise<void> {
+    var current_settings = await this.get_settings() ;
+    current_settings[setting] = value ;
+    await this.set_settings(current_settings) ;
+  }
+  public async resetSettings(): Promise<void> {
+    var current_settings = await this.get_settings() ;
+    for (let index of this.settings_index) {
+      var setting_name = this.settings_list[index] ;
+      var setting_value = this.settings_values[index] ;
+      current_settings[setting_name] = setting_value ;
+    }
+    await this.set_settings(current_settings) ;
+  }
 
+  public async get_export(): Promise<string> {
+    var database_json : any = {} ;
+    var db_keys = await this.get_keys() ;
+    for (let key of db_keys) {
+      database_json[key] = await this.get(key) ;
+    }
+    return JSON.stringify(database_json) ;
+  }
+  public async set_import(database_str: string): Promise<void> {
+    var database_json = JSON.parse(database_str) ;
+    for (let key in database_json) {
+      if(database_json.hasOwnProperty(key)){
+        await this.set(key, database_json[key]) ;
+      }
+    }
+  }
 
   // not database-related
 

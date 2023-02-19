@@ -12,7 +12,7 @@ export class ActionCardComponent implements OnInit {
 
   @Input() action !: Action ;
   @Input() action_css !: string;
-  @Input() action_page !: string;
+  @Input() current_page !: string;
 
 
   constructor(

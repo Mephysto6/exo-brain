@@ -34,7 +34,7 @@
         *ngIf="!(this.action | done)"
         [action]="action"
         action_css="action-list"
-        action_page="view">
+        current_page="view">
       </app-action-card>
     </ion-list>
   </div>
@@ -44,9 +44,15 @@
       <!-- category : {{category}} -->
       <ion-card>
         <ion-card-header class="category-header">
-          <ion-icon *ngIf="this.actionService.category_folded[category]" name="caret-forward-outline" (click)="this.actionService.fold_unfold(category)"></ion-icon>
+          <app-category-card
+            (click)="this.actionService.fold_unfold(category)"
+            [folded]="this.actionService.category_folded[category]"
+            [name]="category"
+            current_page="view"
+          ></app-category-card>
+          <!-- <ion-icon *ngIf="this.actionService.category_folded[category]" name="caret-forward-outline" (click)="this.actionService.fold_unfold(category)"></ion-icon>
           <ion-icon *ngIf="!this.actionService.category_folded[category]" name="caret-down-outline" (click)="this.actionService.fold_unfold(category)"></ion-icon>
-          {{category}}
+          {{category}} -->
         </ion-card-header>
       </ion-card>
 
@@ -56,7 +62,7 @@
             *ngIf="!(this.action | done) && (this.action.category === category)"
             [action]="action"
             action_css="action-list"
-            action_page="view">
+            current_page="view">
           </app-action-card>
         </ion-list>
       </div>

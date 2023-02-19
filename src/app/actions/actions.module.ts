@@ -6,7 +6,6 @@ import { ActionsRoutingModule } from './actions-routing.module';
 
 import { SharedModule } from 'src/app/shared/shared.module';
 import { RouterModule } from '@angular/router';
-import { CoreModule } from '../core/core.module';
 import { IonicModule } from '@ionic/angular';
 // pages
 import { PageActionListComponent } from './pages/page-action-list/page-action-list.component';
@@ -18,6 +17,7 @@ import { PageActionAddComponent } from './pages/page-action-add/page-action-add.
 import { FormActionComponent } from './components/form-action/form-action.component';
 import { FormCategoryComponent } from './components/form-category/form-category.component';
 import { ActionCardComponent } from './components/action-card/action-card.component';
+import { CategoryCardComponent } from './components/category-card/category-card.component';
 import { ButtonRefreshComponent } from './components/button-refresh/button-refresh.component';
 import { PriorityIconComponent } from './components/priority-icon/priority-icon.component';
 
@@ -31,6 +31,7 @@ import { PriorityIconComponent } from './components/priority-icon/priority-icon.
     FormActionComponent,
     FormCategoryComponent,
     ActionCardComponent,
+    CategoryCardComponent,
     ButtonRefreshComponent,
     PriorityIconComponent,
   ],

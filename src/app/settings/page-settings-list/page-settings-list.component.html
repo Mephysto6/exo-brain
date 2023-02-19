@@ -10,7 +10,29 @@
 </ion-header>
 
 <ion-content>
-  <p>
-    page-settings-list works!
-  </p>
+  <ion-button (click)="on_reset_to_default()">Reset to Default</ion-button>
+  <br><br>
+  <!-- <ion-list>
+    <ion-item *ngFor="let index of this.actionService.settings_index">
+      <div>
+        {{this.actionService.settings_list[index]}} : {{this.actionService.settings_values[index]}}
+      </div>
+    </ion-item>
+  </ion-list> -->
+  <ion-button (click)="on_export_database()">Export database</ion-button>
+  <ion-button (click)="on_import_database()">Import database</ion-button>
+
+  <div *ngIf="show_export">
+    {{this.export_value}}
+    <br>
+    <ion-button (click)="this.show_export=false;">Hide</ion-button>
+  </div>
+  <div *ngIf="show_import">
+    <app-form-import-db (submitted)="on_submit($event)"></app-form-import-db>
+    <br>
+    <ion-button (click)="this.show_import=false;">Hide</ion-button>
+  </div>
+
+
+
 </ion-content>
