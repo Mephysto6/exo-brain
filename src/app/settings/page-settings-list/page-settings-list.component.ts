@@ -26,6 +26,10 @@ export class PageSettingsListComponent implements OnInit {
     this.actionService.resetSettings() ;
   }
 
+  async on_reset_database() {
+    await this.actionService.clear_keys() ;
+  }
+
   async on_export_database() {
     this.export_value = await this.actionService.get_export() ;
     this.show_export = true ;

@@ -18,6 +18,11 @@ export class DonePipe implements PipeTransform {
   transform(action : Action): boolean {
     // console.log("transform")
     var done = false ;
+
+    if (action.last_done === "Never") {
+      return done;
+    }
+    // need to compare the "start" (last occurence of repetition) and the "current"
     const now = this.actionService.make_date(new Date());
     var current_date = this.make_date_object(now) ;
     var start = this.make_date_object(action.creation_date);
@@ -39,15 +44,24 @@ export class DonePipe implements PipeTransform {
     }
 
     if (action.repetition == "WEEKLY") {
+      var start_fancy = new Date(
+        start.year, start.month, start.day, start.hour, start.minute
+      ) ;
+      var now_fancy = new Date(
+        current_date.year, current_date.month, current_date.day, current_date.hour, current_date.minute
+      ) ;
+
       start = Object.assign(new DateObject(), current_date) ;
       start.hour = Number(action.repetition_hour) ;
       start.minute = 0 ;
 
-      var start_fancy = new Date(action.creation_date);
-      var now_fancy = new Date(now) ;
       var start_day = start_fancy.getDay(); //  0 for sunday, 1 for monday, ..., 6 for saturday
       var now_day = now_fancy.getDay() ;
 
+      console.log("start_fancy : ", start_fancy)
+      console.log("now_fancy : ", now_fancy)
+      console.log("start_day : ", start_day)
+      console.log("action.repetition_day : ", action.repetition_day)
       if (start_day == Number(action.repetition_day)) {
         if (current_date.hour < Number(action.repetition_hour)) {
           for (let i=0 ; i<7 ; i++) {
@@ -63,11 +77,13 @@ export class DonePipe implements PipeTransform {
         }
       }
     }
-    // console.log("action.creation_date : ", action.creation_date)
-    // console.log("action.repetition : ", action.repetition)
-    // console.log("start : ", start)
-    // console.log("last_done : ", last_done)
-    // console.log("current_date : ", current_date)
+    console.log("action.creation_date : ", action.creation_date)
+    console.log("action.repetition : ", action.repetition)
+    console.log("start : ", start)
+    console.log("last_done : ", last_done)
+    console.log("current_date : ", current_date)
+    console.log("this.is_earlier_than(start, last_done) : ", this.is_earlier_than(start, last_done))
+    console.log("this.is_earlier_than(last_done, start) : ", this.is_earlier_than(last_done, start))
 
     if (this.is_earlier_than(start, last_done)) var done = true ;
     if (this.is_earlier_than(last_done, start)) var done = false ;
@@ -114,13 +130,14 @@ export class DonePipe implements PipeTransform {
 
   make_date_object(input_date: string): DateObject {
     var output_date = new DateObject() ;
-    // dates under the template of "2022Y - 12M - 31D - 23:59"
+    // input_date under the template of "2022/12/31T23:59"
 
-    var split = input_date.split(" - ") ;
-    var year = Number(split[0].slice(0, -1)) ; //  2022
-    var month = Number(split[1].slice(0, -1)) ; //  12
-    var day = Number(split[2].slice(0, -1) ); //  31
-    var time = split[3].split(":") ;
+    var split = input_date.split("/") ;
+    var year = Number(split[0]) ; //  2022
+    var month = Number(split[1]) ; //  12
+    var sub_split = split[2].split("T") ;
+    var day = Number(sub_split[0]); //  31
+    var time = sub_split[1].split(":") ;
     var hour = Number(time[0]) ; //  23
     var minute = Number(time[1]) ; //  59
 

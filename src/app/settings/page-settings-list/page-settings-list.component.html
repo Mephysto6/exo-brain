@@ -12,6 +12,13 @@
 <ion-content>
   <ion-button (click)="on_reset_to_default()">Reset to Default</ion-button>
   <br><br>
+  <ion-button
+    (click)="on_reset_database()"
+    color="danger"
+  >
+    Reset Database
+  </ion-button>
+  <br><br>
   <!-- <ion-list>
     <ion-item *ngFor="let index of this.actionService.settings_index">
       <div>

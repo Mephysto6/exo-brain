@@ -274,7 +274,7 @@ export class ActionsService {
   async unDone(id: number) {
     console.log("unDone", id) ;
     var this_action = await this.getActionDetails(id) ;
-    this_action.last_done = this_action.creation_date ;
+    this_action.last_done = "Never" ;
     await this.set_action_by_id(id, this_action) ;
     await this.refresh()
   }
@@ -376,7 +376,7 @@ export class ActionsService {
 
   // not database-related
 
-  make_date(date :Date) : string {
+  make_date(date: Date) : string {
     var date_string = date.toLocaleString('en-GB') ;
     // console.log("date_string : ", date_string) ;
     var total_date = date_string.split(" ") ;
@@ -407,7 +407,7 @@ export class ActionsService {
 
     var minute = date_hour.split(":")[1]
 
-    var my_date = year + "Y - " + month + "M - " + day + "D - " + hour + ":" + minute;
+    var my_date = year + "/" + month + "/" + day + "T" + hour + ":" + minute;
     // console.log("my_date", my_date) ;
     return my_date ;
   }

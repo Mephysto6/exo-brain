@@ -10,8 +10,8 @@ export class Action implements ActionI {
   repetition = "ONCE";
   repetition_hour = 0;
   repetition_day = 0;
-  creation_date = "2022Y - 12M - 1D - 00:00";
-  last_done = "2022Y - 12M - 1D - 16:00";
+  creation_date = "2022/12/31T23:59";
+  last_done = "Never";
   category = "No category" ;
 
   constructor(obj?: Partial<Action>) {
