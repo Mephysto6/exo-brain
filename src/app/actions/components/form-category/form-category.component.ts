@@ -11,6 +11,7 @@ export class FormCategoryComponent implements OnInit {
   @ViewChild('myForm') myForm!: NgForm;
   @Output() submitted = new EventEmitter<string>() ;
   @Input() show_button : boolean = true ;
+  @Input() init!: string;
 
   public form !: FormGroup;
 
@@ -18,7 +19,7 @@ export class FormCategoryComponent implements OnInit {
 
   ngOnInit() {
     this.form = this.fb.group({
-      category_name:[""],
+      category_name:[this.init],
     });
   }
 

@@ -49,11 +49,12 @@
           <app-form-category
            (submitted)="on_update_category(category, $event)"
            [show_button]="false"
+           [init]="category"
           ></app-form-category>
         </div>
         <!-- add delete category button -->
 
-        <div class="flex-col flex-items">
+        <div class="flex-col flex-items" *ngIf="category!=='No category'">
           <ion-button (click)="on_click_edit_category(category)"
           >Edit</ion-button>
           <ion-button (click)="on_click_delete_category(category)"
