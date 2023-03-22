@@ -32,6 +32,7 @@
   <div *ngIf="show_export">
     {{this.export_value}}
     <br>
+    <ion-button [cdkCopyToClipboard]="this.export_value">Copy to clipboard</ion-button>
     <ion-button (click)="this.show_export=false;">Hide</ion-button>
   </div>
   <div *ngIf="show_import">

@@ -5,6 +5,7 @@ import { SharedModule } from '../shared/shared.module';
 import { IonicModule } from '@ionic/angular';
 import { PageSettingsListComponent } from './page-settings-list/page-settings-list.component';
 import { FormImportDbComponent } from '../settings/form-import-db/form-import-db.component';
+import { ClipboardModule } from '@angular/cdk/clipboard';
 
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 
@@ -20,6 +21,7 @@ import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
     SharedModule,
     ReactiveFormsModule,
     IonicModule.forRoot(),
+    ClipboardModule,
   ],
   exports: [
     PageSettingsListComponent,
