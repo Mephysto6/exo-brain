@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { Action } from 'src/app/core/models/action';
 import { ActionsService } from 'src/app/shared/services/actions.service';
 
 @Component({
