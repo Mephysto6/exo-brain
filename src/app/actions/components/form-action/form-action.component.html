@@ -36,7 +36,7 @@
   <br>
   <div class="form-group">
     <label for="time">time : </label>
-    <input formControlName="time" type="number" id="time">
+    <input formControlName="time" type="number" id="time" class="input_time"> minutes
   </div>
   <br>
   <div class="flex-row form-group">
@@ -58,13 +58,13 @@
     <!-- <input type="text" class="form-control" id="repetition"> -->
   </div>
   <br>
-  <div class="form-group">
-    <label for="repetition_hour">hour of reset (24h clock): </label>
-    <input formControlName='repetition_hour' type="text" id="repetition_hour">
+  <div class="form-group" *ngIf="this.form.value.repetition !== 'ONCE'">
+    <label for="repetition_hour">hour of reset : </label>
+    <input formControlName='repetition_hour' type="time" id="repetition_hour">
   </div>
   <br>
-  <div class="form-group flex-row">
-    <label for="repetition_day">day of reset (only for weekly repetition): </label>
+  <div class="form-group flex-row" *ngIf="this.form.value.repetition === 'WEEKLY'">
+    <label for="repetition_day">day of reset : </label>
     <!-- <input formControlName='repetition_day' type="text" id="repetition_day"> -->
 
     <ion-list lines="none">

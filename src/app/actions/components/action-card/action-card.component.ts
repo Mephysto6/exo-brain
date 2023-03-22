@@ -25,4 +25,11 @@ export class ActionCardComponent implements OnInit {
     // this.action = await this.actionService.getActionDetails(Number(this.action_id))
   }
 
+  make_pretty_time(minutes: number): string {
+    if (minutes < 60) {
+      return minutes + " min"
+    }
+    var hours = Math.floor(minutes / 60)
+    return hours + "h" + minutes%60
+  }
 }

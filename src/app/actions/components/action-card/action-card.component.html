@@ -2,43 +2,48 @@
   {{this.action_css}}
   priority-{{this.action.priority}}
   done-{{this.action | done}}
+  ion-card-size
+  size-for-{{this.current_page}}
 ">
-  <ion-card-content>
+  <ion-card-content class="small-padding">
     <div class="flex-card">
 
       <!-- left buttons -->
-      <ion-button
-        *ngIf='this.current_page === "view"'
-        (click)="this.actionService.clickAction(this.action.id)"
-        class="flex-items">Done
-      </ion-button>
-      <ion-button
-        *ngIf='this.current_page === "list"'
-        (click)="this.actionService.unDone(this.action.id)"
-        class="flex-items">Reset
-      </ion-button>
+      <div class="flex-items">
+        <ion-button
+          *ngIf='this.current_page === "view"'
+          (click)="this.actionService.clickAction(this.action.id)"
+          class="flex-items action-button">Done
+        </ion-button>
+        <ion-button
+          *ngIf='this.current_page === "list"'
+          (click)="this.actionService.unDone(this.action.id)"
+          class="flex-items action-button">Reset
+        </ion-button>
+      </div>
 
-      <!-- action name -->
-      <div class="flex-items done-{{this.action | done}}">
+      <!-- action name & category -->
+      <div class="flex-items wrap-name done-{{this.action | done}}">
         <ion-card-title>{{this.action.name}}</ion-card-title>
         <ion-card-subtitle>{{this.action.category}}</ion-card-subtitle>
       </div>
 
-      <!-- action details -->
-      <div class="flex-items">
-        <div>{{this.action.time}} min</div>
+      <!-- action time details -->
+      <div class="flex-items flex-col wrap-time">
+        <div>{{make_pretty_time(this.action.time)}}</div>
+
         <div *ngIf="this.action.repetition==='ONCE'">One time</div>
         <div *ngIf="this.action.repetition==='DAILY'">
-          Every day, reset at {{this.action.repetition_hour}}:00
+          Every day, reset at {{this.action.repetition_hour}}
         </div>
         <div *ngIf="this.action.repetition==='WEEKLY'">
           Every week, reset on {{this.actionService.get_day_from_number(this.action.repetition_day)}}
-            at {{this.action.repetition_hour}}:00
+            at {{this.action.repetition_hour}}
         </div>
       </div>
 
       <!-- right buttons -->
-      <div class="flex-col flex-items">
+      <div class="flex-col flex-items right-buttons">
         <ion-button
           *ngIf='this.current_page === "change"'
           routerLink="/preparation/edit/{{this.action.id}}"

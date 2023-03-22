@@ -22,72 +22,79 @@ export class DonePipe implements PipeTransform {
     if (action.last_done === "Never") {
       return done;
     }
-    // need to compare the "start" (last occurence of repetition) and the "current"
-    const now = this.actionService.make_date(new Date());
-    var current_date = this.make_date_object(now) ;
-    var start = this.make_date_object(action.creation_date);
+
+    // need to compare the "start" (last occurence of repetition) and the "current date"
+    const my_now = this.actionService.make_date(new Date());
+    var current_date = this.make_date_object(my_now) ;
     var last_done = this.make_date_object(action.last_done) ;
+    var start = new DateObject();
 
     if (action.repetition == "ONCE") {
       // start = creation ;
-      // do nothing
+      start = this.make_date_object(action.creation_date);
     }
 
     if (action.repetition == "DAILY") {
+      // "start" begins as "current date" but at the time of repetition
       start = Object.assign(new DateObject(), current_date) ;
-      start.hour = Number(action.repetition_hour) ;
-      start.minute = 0 ;
+      start.hour = Number(action.repetition_hour.split(":")[0]) ;
+      start.minute = Number(action.repetition_hour.split(":")[1]) ;
 
-      if (current_date.hour < Number(action.repetition_hour)) {
+      // if the current time is before the day's repetition, then the last repetition was the day before
+      if (this.is_earlier_than(current_date, start)) {
         this.remove_one_day(start) ;
       } ;
     }
 
     if (action.repetition == "WEEKLY") {
-      var start_fancy = new Date(
-        start.year, start.month, start.day, start.hour, start.minute
-      ) ;
-      var now_fancy = new Date(
-        current_date.year, current_date.month, current_date.day, current_date.hour, current_date.minute
-      ) ;
-
+      // "start" begins as "current date" but at the time of repetition
       start = Object.assign(new DateObject(), current_date) ;
-      start.hour = Number(action.repetition_hour) ;
-      start.minute = 0 ;
+      start.hour = Number(action.repetition_hour.split(":")[0]) ;
+      start.minute = Number(action.repetition_hour.split(":")[1]) -1 ;
+      // the -1 minute is for things to reset on time T and not T + 1 minute
 
+      // start.day must now be set as the previous day of repetition
+      var start_fancy = new Date(start.year, start.month-1, start.day, start.hour, start.minute);
       var start_day = start_fancy.getDay(); //  0 for sunday, 1 for monday, ..., 6 for saturday
-      var now_day = now_fancy.getDay() ;
 
-      console.log("start_fancy : ", start_fancy)
-      console.log("now_fancy : ", now_fancy)
-      console.log("start_day : ", start_day)
-      console.log("action.repetition_day : ", action.repetition_day)
-      if (start_day == Number(action.repetition_day)) {
-        if (current_date.hour < Number(action.repetition_hour)) {
-          for (let i=0 ; i<7 ; i++) {
-            this.remove_one_day(start) ;
-          }
+      // console.log("current_date : ", current_date)
+      // console.log("start : ", start)
+      // console.log("start_fancy : ", start_fancy)
+      // console.log("start_day : ", start_day)
+      // console.log("action.repetition_day : ", action.repetition_day)
+      // if current day is the day of repetition, and if current time is before repetition time, the last repetition was last week
+      if (start_day == action.repetition_day) {
+        // console.log("current day is the day of repetition")
+        if (this.is_earlier_than(current_date, start)) {
+          // console.log("current time is earlier than start")
+          this.remove_one_week(start) ;
         }
+        // if the current day is the day of repetition, but the current time is after the repetition time, then "start" is correct
       }
+      // if the days are different, then we calculate the difference and remove that amount of day to "start"
       else {
-        var go_back = now_day - Number(action.repetition_day) ;
-        if (go_back < 0) go_back += 7 ;
-        for (let i=0; i<go_back; i++) {
+        var go_back_days = start_day - action.repetition_day ;
+        if (go_back_days < 0) {
+          go_back_days += 7
+        }
+        for (let i=0; i++; i<go_back_days) {
           this.remove_one_day(start) ;
         }
       }
+
     }
-    console.log("action.creation_date : ", action.creation_date)
-    console.log("action.repetition : ", action.repetition)
-    console.log("start : ", start)
-    console.log("last_done : ", last_done)
-    console.log("current_date : ", current_date)
-    console.log("this.is_earlier_than(start, last_done) : ", this.is_earlier_than(start, last_done))
-    console.log("this.is_earlier_than(last_done, start) : ", this.is_earlier_than(last_done, start))
+
+    // console.log("action.name : ", action.name)
+    // console.log("action.creation_date : ", action.creation_date)
+    // console.log("action.repetition : ", action.repetition)
+    // console.log("start : ", start)
+    // console.log("last_done : ", last_done)
+    // console.log("current_date : ", current_date)
+    // console.log("this.is_earlier_than(start, last_done) : ", this.is_earlier_than(start, last_done))
+    // console.log("this.is_earlier_than(last_done, start) : ", this.is_earlier_than(last_done, start))
 
     if (this.is_earlier_than(start, last_done)) var done = true ;
     if (this.is_earlier_than(last_done, start)) var done = false ;
-    // should not use last return statement
     // console.log("done : ", done)
     return done ;
   }
@@ -117,6 +124,12 @@ export class DonePipe implements PipeTransform {
     if (input_date.day == 0) {
       this.remove_one_month(input_date) ;
       input_date.day = this.months_days[input_date.month]
+    }
+  }
+
+  remove_one_week(input_date: DateObject) : void {
+    for (let i=0 ; i<7 ; i++) {
+      this.remove_one_day(input_date) ;
     }
   }
 

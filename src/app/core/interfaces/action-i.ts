@@ -6,7 +6,7 @@ export interface ActionI {
   time : number,
   priority: number,
   repetition: string,
-  repetition_hour: number,
+  repetition_hour: string,
   repetition_day: number,
   creation_date: string,
   last_done: string,

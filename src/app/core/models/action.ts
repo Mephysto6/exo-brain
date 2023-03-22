@@ -8,7 +8,7 @@ export class Action implements ActionI {
   time = 15 ;
   priority = 0;
   repetition = "ONCE";
-  repetition_hour = 0;
+  repetition_hour = "00:00";
   repetition_day = 0;
   creation_date = "2022/12/31T23:59";
   last_done = "Never";
