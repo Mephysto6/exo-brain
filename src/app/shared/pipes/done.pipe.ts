@@ -52,32 +52,45 @@ export class DonePipe implements PipeTransform {
       start.hour = Number(action.repetition_hour.split(":")[0]) ;
       start.minute = Number(action.repetition_hour.split(":")[1]) -1 ;
       // the -1 minute is for things to reset on time T and not T + 1 minute
+      if (start.minute < 0) {
+        // console.log("start.minute < 0")
+        start.minute += 60 ;
+        start.hour -= 1 ;
+        if (start.hour < 0) {
+          // console.log("start.hour < 0")
+          start.hour += 24 ;
+          this.remove_one_day(start) ;
+        }
+      }
 
       // start.day must now be set as the previous day of repetition
       var start_fancy = new Date(start.year, start.month-1, start.day, start.hour, start.minute);
       var start_day = start_fancy.getDay(); //  0 for sunday, 1 for monday, ..., 6 for saturday
 
       // console.log("current_date : ", current_date)
-      // console.log("start : ", start)
+      // console.log(" beginning start : ", start)
       // console.log("start_fancy : ", start_fancy)
       // console.log("start_day : ", start_day)
       // console.log("action.repetition_day : ", action.repetition_day)
       // if current day is the day of repetition, and if current time is before repetition time, the last repetition was last week
       if (start_day == action.repetition_day) {
-        // console.log("current day is the day of repetition")
+        // console.log(" current day is the day of repetition")
         if (this.is_earlier_than(current_date, start)) {
-          // console.log("current time is earlier than start")
+          // console.log(" current time is earlier than start")
           this.remove_one_week(start) ;
         }
         // if the current day is the day of repetition, but the current time is after the repetition time, then "start" is correct
       }
       // if the days are different, then we calculate the difference and remove that amount of day to "start"
       else {
+        // console.log(" else")
         var go_back_days = start_day - action.repetition_day ;
         if (go_back_days < 0) {
           go_back_days += 7
         }
-        for (let i=0; i++; i<go_back_days) {
+        // console.log(" go_back_days : ", go_back_days)
+        for (let i=0; i<go_back_days; i++) {
+          // console.log(" went back")
           this.remove_one_day(start) ;
         }
       }
