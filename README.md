@@ -1,5 +1,7 @@
 Hello and welcome to Exo-Brain, the personal app to help share the heavy lifting off of your brain.
 
+## Warning
+This project is not ready to be public. It is still under construction and currently has known issues and bugs (and is ugly af).
 
 ## How to build
 
