@@ -10,6 +10,7 @@ import { Action } from 'src/app/core/models/action';
 // import { File } from '@ionic-native/file';
 import { Storage } from '@ionic/storage-angular';
 
+
 @Injectable({
   providedIn: 'root'
 })
@@ -44,6 +45,10 @@ export class ActionsService {
     "colour customisation": [],
   };
 
+  public get_day_from_number(day_in_num: number): string {
+    return this.days[day_in_num]
+  }
+
 
   // current keys :
   //  id_counter : number - current highest id
@@ -76,7 +81,6 @@ export class ActionsService {
   // get database keys
   public async get_keys() {
     var key_list = await this._storage?.keys()
-    // console.log("key_list : ", key_list)
     if (!(key_list)) {
       key_list = [] ;
       console.log("no key list ")
@@ -103,7 +107,8 @@ export class ActionsService {
     await this.check_key_is_stored("id_counter", "0") ;
     var id_counter_str = await this.get("id_counter") ;
     var id_counter = JSON.parse(id_counter_str) ;
-    // console.log("id_counter : ", id_counter)
+    await this.add_debug("- get_id_counter ")
+    await this.add_debug(id_counter_str)
     return id_counter
   }
   public async increment_id_counter(): Promise<void> {
@@ -111,6 +116,8 @@ export class ActionsService {
     console.log("current_counter : ", current_counter)
     var new_counter = current_counter +1 ;
     console.log("new_counter : ", new_counter)
+    await this.add_debug("- increment_id_counter ")
+    await this.add_debug(String(new_counter))
     await this.set("id_counter", String(new_counter)) ;
   }
 
@@ -119,22 +126,27 @@ export class ActionsService {
     await this.check_key_is_stored("ids", "[]") ;
     var ids_list_str = await this.get("ids") ;
     var ids_list = JSON.parse(ids_list_str) ;
-    console.log("ids_list : ", ids_list)
+    await this.add_debug("- get_ids_list ")
+    await this.add_debug(ids_list_str)
     return ids_list
   }
   public async set_ids_list(ids_list: number[]): Promise<void> {
     var ids_list_str = JSON.stringify(ids_list) ;
+    await this.add_debug("- set_ids_list ")
+    await this.add_debug(ids_list_str)
     await this.set("ids", ids_list_str) ;
   }
 
   // action by id
   public async get_action_by_id(id:number): Promise<Action> {
+    await this.add_debug("- get_action_by_id ")
     await this.check_key_is_stored(String(id), "{}") ;
     var action_str = await this.get(String(id)) ;
     var action = new Action(JSON.parse(action_str)) ;
     return action
   }
   public async set_action_by_id(id:number, action: Action): Promise<void> {
+    await this.add_debug("- set_action_by_id ")
     var action_str = JSON.stringify(action) ;
     await this.set(String(id), action_str) ;
   }
@@ -153,7 +165,6 @@ export class ActionsService {
 
   // categories
   public async get_categories_list(): Promise<string[]> {
-    // await this.set("categories", "[]") ;
     await this.check_key_is_stored("categories", "[]") ;
     var categories_list_str = await this.get("categories") ;
     var categories_list = JSON.parse(categories_list_str) ;
@@ -182,6 +193,13 @@ export class ActionsService {
     await this.set("current_view", current_view) ;
   }
 
+  // debugging
+  public async add_debug(msg: string): Promise<void> {
+    await this.check_key_is_stored("debugging", "") ;
+    var debugging = await this.get("debugging") ;
+    debugging = debugging + msg ;
+    await this.set("debugging", debugging) ;
+  }
   // ------- business functions -------------
 
   async refresh() {
@@ -204,7 +222,7 @@ export class ActionsService {
   }
 
   async createAction(partial_action : Partial<Action>) {
-    console.log('createAction');
+    await this.add_debug("- createAction ")
     // give the new action an id
     await this.increment_id_counter() ;
     partial_action.id = await this.get_id_counter() ;
@@ -223,54 +241,61 @@ export class ActionsService {
   }
 
   async getActionDetails(id: number) : Promise<Action> {
-    console.log('getActionDetails');
+    await this.add_debug("- getActionDetails ")
     var current_action_str = await this.get(String(id)) ;
     var current_action = new Action(JSON.parse(current_action_str)) ;
     return current_action
   }
 
   async getActionList() : Promise<Action[]>{
-    console.log('getActionList');
     var ids_list = await this.get_ids_list() ;
+    await this.add_debug("- START getActionList ")
+    await this.add_debug(String(ids_list));
     var action_list = [] ;
     for (let id of ids_list) {
       var current_action_str = await this.get(String(id)) ;
       var current_action = new Action(JSON.parse(current_action_str)) ;
       action_list.push(current_action)
     }
+    await this.add_debug("- END getActionList ")
     return action_list
   }
 
   async updateAction(id: number, action : Partial<Action>) {
+    console.log('updateAction');
+    await this.add_debug("- updateAction ")
     var stored_action = await this.get_action_by_id(id) ;
     Object.assign(stored_action, action)
     await this.set_action_by_id(id, stored_action) ;
     await this.refresh() ;
-    // get id, update the id, set id
   }
 
   async deleteAction(id: number) {
-    // remove id from ids_list
+    console.log('deleteAction');
+    await this.add_debug("-! START deleteAction ")
     var ids_list = await this.get_ids_list()
     const index = ids_list.indexOf(id)
     if (index > -1) {
       ids_list.splice(index, 1);
     }
     await this.set_ids_list(ids_list)
-    // remove the key of id
+    await this.add_debug("- deleteAction current list :")
+    await this.add_debug(String(ids_list));
     await this._storage?.remove(String(id));
     await this.refresh() ;
+    await delay(1000);
   }
 
+  // action status
   async clickAction(id: number) {
     console.log("clickAction", id) ;
+    await this.add_debug("- clickAction ")
     var date_string = this.make_date(new Date()) ;
     var current_action = await this.getActionDetails(id) ;
     current_action.last_done = date_string
     await this.set_action_by_id(id, current_action) ;
     await this.refresh() ;
   }
-
   async unDone(id: number) {
     console.log("unDone", id) ;
     var this_action = await this.getActionDetails(id) ;
@@ -297,7 +322,7 @@ export class ActionsService {
     await this.refresh() ;
   }
 
-
+  // category
   public async addNewCategory(category_name: string): Promise<void> {
     var current_category_list = await this.get_categories_list() ;
     current_category_list.push(category_name) ;
@@ -342,6 +367,7 @@ export class ActionsService {
     await this.refresh() ;
   }
 
+  // settings
   public async changeSettingValue(setting: string, value: string): Promise<void> {
     var current_settings = await this.get_settings() ;
     current_settings[setting] = value ;
@@ -357,6 +383,7 @@ export class ActionsService {
     await this.set_settings(current_settings) ;
   }
 
+  // export / import DB
   public async get_export(): Promise<string> {
     var database_json : any = {} ;
     var db_keys = await this.get_keys() ;
@@ -376,7 +403,7 @@ export class ActionsService {
 
   // not database-related
 
-  make_date(date: Date) : string {
+  public make_date(date: Date) : string {
     var date_string = date.toLocaleString('en-GB') ;
     // console.log("date_string : ", date_string) ;
     var total_date = date_string.split(" ") ;
@@ -412,7 +439,8 @@ export class ActionsService {
     return my_date ;
   }
 
-  get_day_from_number(day_in_num: number): string {
-    return this.days[day_in_num]
-  }
+}
+
+function delay(ms: number) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
 }
