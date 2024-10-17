@@ -20,7 +20,7 @@
 
   <div *ngIf="this.actionService.current_view==='Actions'">
     <ion-reorder-group [disabled]="false" (ionItemReorder)="handleReorderActions($any($event))">
-      <ion-item *ngFor="let action of this.actionService.action_list">
+      <ion-item *ngFor="let action of this.actionService.temp_action_list">
 
         <ion-reorder slot="start"></ion-reorder>
         <app-action-card

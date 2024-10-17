@@ -19,6 +19,7 @@ export class PageActionChangeComponent implements OnInit {
 
   async ngOnInit() {
     this.actionService.temp_ids_list = await this.actionService.get_ids_list();
+    this.actionService.temp_action_list = await this.actionService.getActionList(this.actionService.temp_ids_list);
     this.actionService.temp_categories_list = await this.actionService.get_categories_list();
     for (let category of this.actionService.categories) {
       this.show_update[category] = false ;
@@ -79,6 +80,7 @@ export class PageActionChangeComponent implements OnInit {
     await this.actionService.set_categories_list(this.actionService.temp_categories_list) ;
     this.actionService.temp_ids_list = [] ;
     this.actionService.temp_categories_list = [] ;
+    await this.actionService.clean_db();
     console.log('clicked on confirm button')
     this.router.navigate(["preparation"]) ;
     this.actionService.refresh() ;

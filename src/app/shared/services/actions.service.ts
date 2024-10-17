@@ -18,10 +18,11 @@ export class ActionsService {
 
   private _storage: Storage | null = null;
 
-  public ids !: Number[] ;
+  public ids !: number[] ;
   public temp_ids_list !: number[] ;
 
   public action_list !: Action[] ;
+  public temp_action_list !: Action[] ;
 
   public categories !: string[] ;
   public temp_categories_list !: string[] ;
@@ -93,7 +94,7 @@ export class ActionsService {
     await this._storage?.clear();
   }
 
-  // verifications
+  // key verifications
   public async check_key_is_stored(key: string, default_value: string): Promise<void> {
     var key_list = await this.get_keys()
     if (!(key_list.includes(key))) {
@@ -124,14 +125,14 @@ export class ActionsService {
   // id list
   public async get_ids_list(): Promise<number[]> {
     await this.check_key_is_stored("ids", "[]") ;
-    var ids_list_str = await this.get("ids") ;
-    var ids_list = JSON.parse(ids_list_str) ;
+    var ids_list_str : string = await this.get("ids") ;
+    var ids_list : number[] = JSON.parse(ids_list_str) ;
     await this.add_debug("- get_ids_list ")
     await this.add_debug(ids_list_str)
     return ids_list
   }
   public async set_ids_list(ids_list: number[]): Promise<void> {
-    var ids_list_str = JSON.stringify(ids_list) ;
+    var ids_list_str : string = JSON.stringify(ids_list) ;
     await this.add_debug("- set_ids_list ")
     await this.add_debug(ids_list_str)
     await this.set("ids", ids_list_str) ;
@@ -200,11 +201,23 @@ export class ActionsService {
     debugging = debugging + msg ;
     await this.set("debugging", debugging) ;
   }
+
+  // db cleanup
+  public async clean_db(): Promise<void> {
+    var range = Array.from({length: await this.get_id_counter()}, (v, k) => k+1); ;
+    for (let id of range) {
+      if ( !(this.ids.includes(id)) ) {
+        await this._storage?.remove(String(id));
+      }
+    }
+  }
+
   // ------- business functions -------------
 
   async refresh() {
     this.ids = await this.get_ids_list()
-    this.action_list = await this.getActionList() ;
+    this.action_list = await this.getActionList(this.ids) ;
+    this.temp_action_list = await this.getActionList(this.temp_ids_list) ;
     this.categories = await this.get_categories_list() ;
     this.current_view = await this.get_current_view() ;
     var settings_json = await this.get_settings() ;
@@ -247,9 +260,9 @@ export class ActionsService {
     return current_action
   }
 
-  async getActionList() : Promise<Action[]>{
-    var ids_list = await this.get_ids_list() ;
-    await this.add_debug("- START getActionList ")
+  async getActionList(ids_list: number[]) : Promise<Action[]>{
+    // var ids_list = await this.get_ids_list() ;
+    await this.add_debug("- getActionList ")
     await this.add_debug(String(ids_list));
     var action_list = [] ;
     for (let id of ids_list) {
@@ -257,7 +270,6 @@ export class ActionsService {
       var current_action = new Action(JSON.parse(current_action_str)) ;
       action_list.push(current_action)
     }
-    await this.add_debug("- END getActionList ")
     return action_list
   }
 
@@ -273,17 +285,13 @@ export class ActionsService {
   async deleteAction(id: number) {
     console.log('deleteAction');
     await this.add_debug("-! START deleteAction ")
-    var ids_list = await this.get_ids_list()
-    const index = ids_list.indexOf(id)
+    const index = this.temp_ids_list.indexOf(id)
     if (index > -1) {
-      ids_list.splice(index, 1);
+      this.temp_ids_list.splice(index, 1);
     }
-    await this.set_ids_list(ids_list)
-    await this.add_debug("- deleteAction current list :")
-    await this.add_debug(String(ids_list));
-    await this._storage?.remove(String(id));
+    await this.add_debug("- deleteAction temp list :")
+    await this.add_debug(String(this.temp_ids_list));
     await this.refresh() ;
-    await delay(1000);
   }
 
   // action status
@@ -339,7 +347,7 @@ export class ActionsService {
     }
     await this.set_categories_list(current_category_list) ;
     // change the name of the category in the actions attributes
-    var action_list = await this.getActionList() ;
+    var action_list = await this.getActionList(this.ids) ;
     for (let action of action_list) {
       if (action.category == old_name) {
         action.category = new_name ;
@@ -357,7 +365,7 @@ export class ActionsService {
     }
     await this.set_categories_list(current_category_list) ;
     // change the name of the category to "No category" in the actions attributes
-    var action_list = await this.getActionList() ;
+    var action_list = await this.getActionList(this.ids) ;
     for (let action of action_list) {
       if (action.category == category_name) {
         action.category = "No category" ;
